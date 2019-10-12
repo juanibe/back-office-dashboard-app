@@ -21,6 +21,37 @@ class ProductIndexComponent extends Component {
     }
   }
 
+  categoryFilter = (value) => {
+    const jwt = getJwt()
+    this.setState({ category: value })
+    if (value !== "9") {
+      axios.get(`http://localhost:3001/api/v1/products?category=${value}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+        .then(response => {
+          this.setState({ products: response.data.result })
+        })
+    } else {
+      axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+        .then(response => {
+          this.setState({ products: response.data.result })
+        })
+    }
+  }
+
+  availabilityFilter = (value) => {
+    const jwt = getJwt()
+    this.setState({ value: value })
+    if (value !== "9") {
+      axios.get(`http://localhost:3001/api/v1/products?available=${value}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+        .then(response => {
+          this.setState({ products: response.data.result })
+        })
+    } else {
+      axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+        .then(response => {
+          this.setState({ products: response.data.result })
+        })
+    }
+  }
 
   componentDidMount() {
 
