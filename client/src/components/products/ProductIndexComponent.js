@@ -13,48 +13,13 @@ class ProductIndexComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      products: [],
-      categories: [],
-      category: "",
-      value: "",
-      loading: true
-    }
-  }
-
-  categoryFilter = (value) => {
-    const jwt = getJwt()
-    this.setState({ category: value })
-    if (value !== "9") {
-      axios.get(`http://localhost:3001/api/v1/products?category=${value}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
-        .then(response => {
-          this.setState({ products: response.data.result })
-        })
-    } else {
-      axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
-        .then(response => {
-          this.setState({ products: response.data.result })
-        })
-    }
-  }
-
-  availabilityFilter = (value) => {
-    const jwt = getJwt()
-    this.setState({ value: value })
-    if (value !== "9") {
-      axios.get(`http://localhost:3001/api/v1/products?available=${value}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
-        .then(response => {
-          this.setState({ products: response.data.result })
-        })
-    } else {
-      axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
-        .then(response => {
-          this.setState({ products: response.data.result })
-        })
+      data: [],
+      pages: null,
+      products: []
     }
   }
 
   componentDidMount() {
-
     const jwt = getJwt()
     if (!jwt) {
       this.props.history.push('/login')
@@ -63,7 +28,10 @@ class ProductIndexComponent extends Component {
     axios.get('http://localhost:3001/api/v1/categories', { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         this.setState({
-          categories: response.data
+          categories: response.data,
+          data: response.data.slice(0, 10),
+          pages: response.data.length / 10,
+          loading: false
         })
       })
 
@@ -71,6 +39,8 @@ class ProductIndexComponent extends Component {
       .then(response => {
         this.setState({
           products: response.data.result,
+          data: response.data.result.slice(0, 10),
+          pages: Math.ceil(response.data.result.length / 10),
           loading: false
         })
       })
@@ -91,8 +61,9 @@ class ProductIndexComponent extends Component {
         <ReactTable
           loading={this.state.loading}
           onFetchData={this.state.fetchData}
-          data={this.state.products}
-          pages={-1}
+          data={this.state.data}
+          pages={this.state.pages}
+          filterable
           columns={[
             {
               Header: "Products",
@@ -104,27 +75,10 @@ class ProductIndexComponent extends Component {
                 {
                   Header: "Availability",
                   accessor: "available",
-                  filterable: true,
-                  Filter: cellInfo => (
-                    <select value={this.state.value} onChange={(e) => { this.availabilityFilter(e.target.value) }}>
-                      <option value="9">All</option>
-                      <option value='1'>Available</option>
-                      <option value='0'>Not available</option>
-                    </select>
-                  )
                 },
                 {
                   Header: "Category",
                   accessor: "category[0].name",
-                  filterable: true,
-                  Filter: () => (
-                    <select value={this.state.category} onChange={(e) => { this.categoryFilter(e.target.value) }}>
-                      <option value="9">All</option>
-                      {this.state.categories.map(response => {
-                        return <option value={response.name}>{response.name}</option>
-                      })}
-                    </select>
-                  )
                 },
                 {
                   Header: "Price",
@@ -146,7 +100,23 @@ class ProductIndexComponent extends Component {
             }
           ]
           }
+          onPageChange={pageIndex => {
+            let pagesize = 10;
+            let low = pageIndex * pagesize;
+            let high = pageIndex * pagesize + pagesize;
+            const jwt = getJwt()
+            axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+              .then(res => {
+                this.setState({
+                  posts: res.data,
+                  data: res.data.result.slice(low, high),
+                  pages: res.data.pages,
+                  loading: false
+                });
+              })
+          }}
           defaultPageSize={10}
+          noDataText={"Loading..."}
           manual
         />
       </div >
