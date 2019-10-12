@@ -1,0 +1,17 @@
+[
+  {
+    "group": "employee",
+    "permissions": [
+      {
+        "resource": "*",
+        "methods": [
+          "POST",
+          "PUT",
+          "GET",
+          "DELETE"
+        ],
+        "action": "allow"
+      }
+    ]
+  }
+]
