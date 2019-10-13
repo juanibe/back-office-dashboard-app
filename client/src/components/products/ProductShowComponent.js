@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from 'react-router-dom';
+import ProductDeleteItemComponent from '../../components/products/ProductDeleteItemComponent'
 import Axios from "axios";
 import { getJwt } from '../../helpers/jwt'
 import back from '../../img/return.png'
@@ -49,7 +50,7 @@ class ProductShowComponent extends Component {
             </div>
             <button className="btn btn-light" onClick={this.props.history.goBack}><img src={back} /></button>
             <button className="btn btn-light" onClick={this.props.history.goBack}><img src={writing} /></button>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={bin} /></button>
+            <ProductDeleteItemComponent />
           </div>
           <div class="card-footer text-muted">
             2 days ago
