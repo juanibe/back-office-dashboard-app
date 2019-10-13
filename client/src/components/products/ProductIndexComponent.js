@@ -7,6 +7,8 @@ import eye from '../../img/eye.png'
 import bin from '../../img/bin.png'
 import writing from '../../img/writing.png'
 import plus from '../../img/plus.png'
+import available_icon from '../../img/available.png'
+import not_available_icon from '../../img/not_available.png'
 
 
 class ProductIndexComponent extends Component {
@@ -15,7 +17,6 @@ class ProductIndexComponent extends Component {
     this.state = {
       data: [],
       categories: [],
-      products: [],
       category_value: '',
       availability_value: '',
       filters: {},
@@ -24,26 +25,37 @@ class ProductIndexComponent extends Component {
   }
 
   applyFilter = (value) => {
+
     const jwt = getJwt()
 
     let filterObject = JSON.parse(value)
 
-    Object.assign(this.state.filters, filterObject)
+    let filters = this.state.filters
 
-    this.setState({ filters: filterObject })
+    Object.assign(filters, filterObject)
+
+    this.setState({ filters: filters })
 
     let config = {
       headers: { 'Authorization': `Bearer ${jwt}` },
       params: this.state.filters
     }
 
+
+    /** 
+     * TODO: when changes page with filters, it shows everything again.
+     * When apply filter it will show all the items in one page, not matter
+     * how many are they
+    */
+
     axios.get(`http://localhost:3001/api/v1/products`, config)
       .then(response => {
+        console.log(response.config.params)
         this.setState({
-          products: response.data.result,
-          category_value: value,
+          data: response.data.result
         })
       })
+
   }
 
   componentDidMount() {
@@ -62,7 +74,6 @@ class ProductIndexComponent extends Component {
     axios.get('http://localhost:3001/api/v1/products', { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         this.setState({
-          products: response.data.result,
           data: response.data.result.slice(0, 10),
           pages: Math.ceil(response.data.result.length / 10),
           loading: false
@@ -86,6 +97,7 @@ class ProductIndexComponent extends Component {
           loading={this.state.loading}
           data={this.state.data}
           pages={this.state.pages}
+          style={{ textAlign: 'center' }}
           columns={[
             {
               Header: "Products",
@@ -95,11 +107,13 @@ class ProductIndexComponent extends Component {
                   accessor: "name",
                 },
                 {
-                  Header: "Availability",
-                  accessor: "available",
+                  id: 'available',
+                  Header: "Available",
+                  accessor: d => { return d.available ? <img src={available_icon} /> : <img src={not_available_icon} /> },
                   filterable: true,
                   Filter: () => (
-                    <select value={this.state.availability_value} onChange={(e) => this.applyFilter(e.target.value)} >
+                    <select className='form-control' value={this.state.availability_value} onChange={(e) => this.applyFilter(e.target.value)} >
+                      <option value={`{ "available": "" }`}>Select</option>
                       <option value={`{ "available": "" }`}>All</option>
                       <option value={`{ "available": "1" }`}>Available</option>
                       <option value={`{ "available": "0" }`}>Not available</option>
@@ -111,7 +125,8 @@ class ProductIndexComponent extends Component {
                   accessor: "category[0].name",
                   filterable: true,
                   Filter: () => (
-                    <select value={this.state.category_value} onChange={(e) => this.applyFilter(e.target.value)}>
+                    <select className='form-control' value={this.state.category_value} onChange={(e) => this.applyFilter(e.target.value)}>
+                      <option value={`{ "category": "" }`}>Select</option>
                       <option value={`{ "category": "" }`}>All</option>
                       {this.state.categories.map((category, index) => {
                         return <option key={index} value={`{ "category": "${category.name}" }`}>{category.name}</option>
@@ -122,10 +137,6 @@ class ProductIndexComponent extends Component {
                 {
                   Header: "Price",
                   accessor: "price"
-                },
-                {
-                  Header: "State",
-                  accessor: "state"
                 },
                 {
                   Header: "",
@@ -147,7 +158,6 @@ class ProductIndexComponent extends Component {
             axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
               .then(res => {
                 this.setState({
-                  products: res.data.result,
                   data: res.data.result.slice(low, high),
                   pages: res.data.pages,
                   loading: false
@@ -155,7 +165,6 @@ class ProductIndexComponent extends Component {
               })
           }}
           defaultPageSize={10}
-          noDataText={"Loading..."}
           manual
         />
       </div >
