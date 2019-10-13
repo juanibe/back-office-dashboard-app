@@ -14,9 +14,36 @@ class ProductIndexComponent extends Component {
     super(props)
     this.state = {
       data: [],
+      categories: [],
+      products: [],
+      category_value: '',
+      availability_value: '',
+      filters: {},
       pages: null,
-      products: []
     }
+  }
+
+  applyFilter = (value) => {
+    const jwt = getJwt()
+
+    let filterObject = JSON.parse(value)
+
+    Object.assign(this.state.filters, filterObject)
+
+    this.setState({ filters: filterObject })
+
+    let config = {
+      headers: { 'Authorization': `Bearer ${jwt}` },
+      params: this.state.filters
+    }
+
+    axios.get(`http://localhost:3001/api/v1/products`, config)
+      .then(response => {
+        this.setState({
+          products: response.data.result,
+          category_value: value,
+        })
+      })
   }
 
   componentDidMount() {
@@ -28,10 +55,7 @@ class ProductIndexComponent extends Component {
     axios.get('http://localhost:3001/api/v1/categories', { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         this.setState({
-          categories: response.data,
-          data: response.data.slice(0, 10),
-          pages: response.data.length / 10,
-          loading: false
+          categories: response.data
         })
       })
 
@@ -60,10 +84,8 @@ class ProductIndexComponent extends Component {
         <hr />
         <ReactTable
           loading={this.state.loading}
-          onFetchData={this.state.fetchData}
           data={this.state.data}
           pages={this.state.pages}
-          filterable
           columns={[
             {
               Header: "Products",
@@ -75,10 +97,27 @@ class ProductIndexComponent extends Component {
                 {
                   Header: "Availability",
                   accessor: "available",
+                  filterable: true,
+                  Filter: () => (
+                    <select value={this.state.availability_value} onChange={(e) => this.applyFilter(e.target.value)} >
+                      <option value={`{ "available": "" }`}>All</option>
+                      <option value={`{ "available": "1" }`}>Available</option>
+                      <option value={`{ "available": "0" }`}>Not available</option>
+                    </select>
+                  )
                 },
                 {
                   Header: "Category",
                   accessor: "category[0].name",
+                  filterable: true,
+                  Filter: () => (
+                    <select value={this.state.category_value} onChange={(e) => this.applyFilter(e.target.value)}>
+                      <option value={`{ "category": "" }`}>All</option>
+                      {this.state.categories.map((category, index) => {
+                        return <option key={index} value={`{ "category": "${category.name}" }`}>{category.name}</option>
+                      })}
+                    </select>
+                  )
                 },
                 {
                   Header: "Price",
@@ -108,7 +147,7 @@ class ProductIndexComponent extends Component {
             axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
               .then(res => {
                 this.setState({
-                  posts: res.data,
+                  products: res.data.result,
                   data: res.data.result.slice(low, high),
                   pages: res.data.pages,
                   loading: false
