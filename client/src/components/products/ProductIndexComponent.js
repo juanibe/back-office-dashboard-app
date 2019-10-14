@@ -25,7 +25,9 @@ class ProductIndexComponent extends Component {
     }
   }
 
-
+  handleChange = (value) => {
+    this.setState({ data: value })
+  }
 
   applyFilter = (value) => {
 
@@ -146,7 +148,7 @@ class ProductIndexComponent extends Component {
                   Cell: row => [
                     <Link to={`products/${row.original._id}/show`} params={{ id: row.original._id }}><button className="btn btn-light"><img src={eye} /></button></Link>,
                     <Link to={`products/${row.original._id}/edit`}><button className="btn btn-light"><img src={writing} /></button></Link>,
-                    <ProductDeleteItemComponent product={row.original._id} />
+                    <ProductDeleteItemComponent product={row.original._id} products={this.state.data} handleChange={this.handleChange} />
                   ]
                 }
               ]

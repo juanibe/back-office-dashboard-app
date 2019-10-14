@@ -11,8 +11,14 @@ class ProductDeleteItemComponent extends Component {
     super(props)
     this.state = {
       alert: null,
-      data: this.props.product
+      data: null
     }
+  }
+
+
+  componentDidMount = () => {
+
+    this.setState({ data: this.props.product })
   }
 
   deleteItem = () => {
@@ -37,9 +43,10 @@ class ProductDeleteItemComponent extends Component {
       )
 
     const deleteConfirmation = () => {
-      axios.delete(`http://localhost:3001/api/v1/products/${this.state.data}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+      axios.delete(`http://localhost:3001/api/v1/products/${this.props.product}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
         .then(response => {
-          this.setState({ product: response.data, alert: hideAlert() })
+          this.setState({ data: response.data.result, alert: hideAlert() })
+          this.props.handleChange(this.state.data)
         })
     }
 
