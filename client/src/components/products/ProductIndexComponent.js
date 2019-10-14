@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from 'react-router-dom'
 import ReactTable from 'react-table'
-import ProductDeleteItemComponent from '../../components/products/ProductDeleteItemComponent'
 import { getJwt } from '../../helpers/jwt'
 import axios from 'axios'
 import eye from '../../img/eye.png'
