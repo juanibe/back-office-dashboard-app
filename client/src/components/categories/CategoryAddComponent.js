@@ -65,9 +65,9 @@ class CategoryAddComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Add Description</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Group controlId="formGroupDescription">
-            <Form.Control
+            <Form.Control as="textarea" rows="10"
               size="sm"
               type="text"
               placeholder="Add description"

@@ -96,7 +96,7 @@ class ProductAddComponent extends Component {
           </Form.Group>
           <Form.Label>Add Comment</Form.Label>
           <Form.Group controlId="formGroupComment">
-            <Form.Control
+            <Form.Control as="textarea" rows="3"
               size="sm"
               type="text"
               placeholder="Add comment"
@@ -107,7 +107,7 @@ class ProductAddComponent extends Component {
           </Form.Group>
           <Form.Label>Add Description</Form.Label>
           <Form.Group controlId="formGroupDescription">
-            <Form.Control
+            <Form.Control as="textarea" rows="3"
               size="sm"
               type="text"
               placeholder="Add description"

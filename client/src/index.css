@@ -70,12 +70,13 @@ li{
   box-shadow: 1px 1px;
   padding: 20px;
   width: 400px;
-  margin-top: 70px ;
+  margin-top: 35px ;
   margin-left: 25%;
   border: solid 1px black;
 }
 
 .form-title{
+  font-size: 1.3em;
   text-align: center;
   margin: 20px;
 }
