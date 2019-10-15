@@ -24,6 +24,7 @@ class ProductIndexComponent extends Component {
       filters: {},
       pages: null,
       alert: false,
+      toast: false
     }
   }
 
@@ -32,10 +33,10 @@ class ProductIndexComponent extends Component {
     axios.delete(`http://localhost:3001/api/v1/products/${this.state.product}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         let data = this.state.data.filter(a => { return a._id !== response.data.id })
-        console.log(data)
         this.setState({
           alert: false,
-          data: data
+          data: data,
+          toast: true
         })
       })
   }
