@@ -77,6 +77,7 @@ const index = require('./routes/web-routes/index');
 const auth = require('./routes/api-routes/auth');
 const products = require('./routes/api-routes/product');
 const categories = require('./routes/api-routes/category')
+const clients = require('./routes/api-routes/client')
 const groups = require('./routes/api-routes/group')
 const users = require('./routes/api-routes/user')
 
@@ -84,6 +85,7 @@ app.use('/api/v1', index);
 app.use('/api/v1', auth)
 app.use('/api/v1/products', passport.authenticate('jwt', { session: false }), products)
 app.use('/api/v1/categories', passport.authenticate('jwt', { session: false }), categories)
+app.use('/api/v1/clients', passport.authenticate('jwt', { session: false }), clients)
 app.use('/api/v1/groups', groups)
 app.use('/api/v1/users', passport.authenticate('jwt', { session: false }), users)
 
