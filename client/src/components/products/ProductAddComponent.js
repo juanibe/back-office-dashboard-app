@@ -94,7 +94,7 @@ class ProductAddComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Add Comment</Form.Label>
+          <Form.Label>Comment</Form.Label>
           <Form.Group controlId="formGroupComment">
             <Form.Control as="textarea" rows="3"
               size="sm"
@@ -105,7 +105,7 @@ class ProductAddComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Add Description</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Group controlId="formGroupDescription">
             <Form.Control as="textarea" rows="3"
               size="sm"
@@ -116,7 +116,7 @@ class ProductAddComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Add price</Form.Label>
+          <Form.Label>Price</Form.Label>
           <Form.Group controlId="formGroupPrice">
             <Form.Control
               size="sm"
