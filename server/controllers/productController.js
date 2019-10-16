@@ -20,10 +20,6 @@ exports.index = function (req, res) {
   Product.listWithCategory(filters, category).then(response => {
     res.json({ result: response })
   })
-
-  // Product.list(filters).then(response => {
-  //   res.json({ 'success': true, result: response })
-  // })
 }
 
 exports.test1 = function (req, res) {
