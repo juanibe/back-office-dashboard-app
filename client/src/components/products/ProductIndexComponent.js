@@ -58,13 +58,6 @@ class ProductIndexComponent extends Component {
       params: this.state.filters
     }
 
-
-    /** 
-     * TODO: when changes page with filters, it shows everything again.
-     * When apply filter it will show all the items in one page, not matter
-     * how many are they
-    */
-
     axios.get(`http://localhost:3001/api/v1/products`, config)
       .then(response => {
         this.setState({
@@ -110,10 +103,10 @@ class ProductIndexComponent extends Component {
             <SweetAlert
               warning
               showCancel
-              confirmBtnText="Yes, delete it!"
+              confirmBtnText="Yes, delete it"
               confirmBtnBsStyle="danger"
               cancelBtnBsStyle="default"
-              title="Are you sure?"
+              title='Are you sure?'
               onConfirm={() => { this.deleteConfirmation() }}
               onCancel={() => { this.setState({ alert: false }) }}
             >
@@ -174,7 +167,7 @@ class ProductIndexComponent extends Component {
                   Header: "",
                   Cell: row => [
                     <Link to={`products/${row.original._id}/show`} params={{ id: row.original._id }}><button className="btn btn-light"><img src={eye} /></button></Link>,
-                    <Link to={`products/${row.original._id}/edit`}><button className="btn btn-light"><img src={writing} /></button></Link>,
+                    <Link to={`products/${row.original._id}/edit`} ><button className="btn btn-light"><img src={writing} /></button></Link>,
                     <span><button className="btn btn-light" onClick={() => this.setState({ alert: true, product: row.original._id })}><img src={bin} /></button></span>]
                 }
               ]
