@@ -9,6 +9,7 @@ import SideBar from "../components/SideBar";
 import ProductIndexComponent from './products/ProductIndexComponent'
 import ProductShowComponent from "./products/ProductShowComponent";
 import ProductAddComponent from "./products/ProductAddComponent";
+import ProductEditComponent from "./products/ProductEditComponent";
 
 import CategoryIndexComponent from './categories/CategoryIndexComponent'
 import CategoryShowComponent from './categories/CategoryShowComponent'
@@ -32,12 +33,12 @@ class Wrapper extends Component {
             <Route exact path={'/products'} component={ProductIndexComponent} />
             <Route exact path={'/products/:id/show'} component={ProductShowComponent} />
             <Route exact path={'/products/add'} component={ProductAddComponent} />
-            <Route exact path={'/products/:id/edit'} component={ProductShowComponent} />
+            <Route exact path={'/products/:id/edit'} component={ProductEditComponent} />
             <Route exact path={'/products/:id/delete'} component={ProductShowComponent} />
             <Route exact path={'/categories'} component={CategoryIndexComponent} />
             <Route exact path={'/categories/:id/show'} component={CategoryShowComponent} />
             <Route exact path={'/categories/add'} component={CategoryAddComponent} />
-            <Route exact path={'/categpries/:id/edit'} component={CategoryShowComponent} />
+            <Route exact path={'/categories/:id/edit'} component={CategoryShowComponent} />
             <Route exact path={'/categories/:id/delete'} component={CategoryShowComponent} />
           </SideBar>
         </AuthenticatedComponent>
