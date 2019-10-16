@@ -94,17 +94,6 @@ class ProductAddComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Comment</Form.Label>
-          <Form.Group controlId="formGroupComment">
-            <Form.Control as="textarea" rows="3"
-              size="sm"
-              type="text"
-              placeholder="Add comment"
-              name="comment"
-              value={this.state.comment}
-              onChange={e => { this.handleChange(e) }}
-            />
-          </Form.Group>
           <Form.Label>Description</Form.Label>
           <Form.Group controlId="formGroupDescription">
             <Form.Control as="textarea" rows="3"
@@ -113,6 +102,17 @@ class ProductAddComponent extends Component {
               placeholder="Add description"
               name="description"
               value={this.state.description}
+              onChange={e => { this.handleChange(e) }}
+            />
+          </Form.Group>
+          <Form.Label>Comment</Form.Label>
+          <Form.Group controlId="formGroupComment">
+            <Form.Control as="textarea" rows="3"
+              size="sm"
+              type="text"
+              placeholder="Add comment"
+              name="comment"
+              value={this.state.comment}
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
