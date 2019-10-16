@@ -57,6 +57,9 @@ class SideBar extends Component {
                   <Link to="/categories" className='btn'>Categories</Link>
                 </li>
                 <li className="nav-item">
+                  <Link to="#" className='btn'>Clients</Link>
+                </li>
+                <li className="nav-item">
                   <Link to="#" className='btn'>Stats</Link>
                 </li>
                 <li className="nav-item">
