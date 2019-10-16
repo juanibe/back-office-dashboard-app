@@ -57,15 +57,6 @@ class ProductEditComponent extends Component {
     const category = this.state.category
     const available = this.state.available
 
-    const data = {
-      name,
-      description,
-      comment,
-      price,
-      category,
-      available,
-    }
-    console.log('DATA', data)
     const headers = {
       'Authorization': `Bearer ${jwt}`,
     }
@@ -80,22 +71,18 @@ class ProductEditComponent extends Component {
     }, {
       headers: headers,
     }).then(response => {
-      console.log('resrassadas', response.data)
       this.props.history.push(`/products/${response.data._id}/show`)
     })
   }
 
   handleChange = event => {
     const { name, value } = event.target;
-    console.log(value)
     this.setState({
       [name]: value
     });
   };
 
   render() {
-    console.log(this.state.available)
-
     if (!this.state.categories) {
       return (
         <div>Loading...</div>
