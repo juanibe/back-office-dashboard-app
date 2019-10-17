@@ -14,6 +14,7 @@ import ProductEditComponent from "./products/ProductEditComponent";
 import CategoryIndexComponent from './categories/CategoryIndexComponent'
 import CategoryShowComponent from './categories/CategoryShowComponent'
 import CategoryAddComponent from './categories/CategoryAddComponent'
+import CategoryEditComponent from './categories/CategoryEditComponent'
 
 
 class Wrapper extends Component {
@@ -38,7 +39,7 @@ class Wrapper extends Component {
             <Route exact path={'/categories'} component={CategoryIndexComponent} />
             <Route exact path={'/categories/:id/show'} component={CategoryShowComponent} />
             <Route exact path={'/categories/add'} component={CategoryAddComponent} />
-            <Route exact path={'/categories/:id/edit'} component={CategoryShowComponent} />
+            <Route exact path={'/categories/:id/edit'} component={CategoryEditComponent} />
             <Route exact path={'/categories/:id/delete'} component={CategoryShowComponent} />
           </SideBar>
         </AuthenticatedComponent>

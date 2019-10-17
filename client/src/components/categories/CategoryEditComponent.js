@@ -3,16 +3,29 @@ import Form from "react-bootstrap/Form";
 import axios from 'axios'
 import { getJwt } from '../../helpers/jwt'
 import { withRouter } from 'react-router-dom'
-import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts';
 
-class CategoryAddComponent extends Component {
+
+class CategoryEditComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
       name: "",
-      description: "",
+      description: ""
     }
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(this.props.match.params)
+    const jwt = getJwt()
+
+    axios.get(`http://localhost:3001/api/v1/categories/${this.props.match.params.id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+      .then(response => {
+        console.log(response)
+        this.setState({
+          name: response.data.name,
+          description: response.data.description,
+        })
+      })
   }
 
   handleFormSubmit = event => {
@@ -23,28 +36,22 @@ class CategoryAddComponent extends Component {
     const name = this.state.name
     const description = this.state.description
 
-    const data = {
-      name,
-      description,
-    }
-
     const headers = {
       'Authorization': `Bearer ${jwt}`,
     }
 
-    axios.post('http://localhost:3001/api/v1/categories', data, {
+    axios.put(`http://localhost:3001/api/v1/categories/${this.props.match.params.id}`, {
+      name,
+      description
+    }, {
       headers: headers,
     }).then(response => {
       this.props.history.push(`/categories/${response.data._id}/show`)
-    }).catch(error => {
-      ToastsStore.error("Unauthorized", 10000)
-      console.log(error)
     })
   }
 
   handleChange = event => {
     const { name, value } = event.target;
-
     this.setState({
       [name]: value
     });
@@ -53,12 +60,7 @@ class CategoryAddComponent extends Component {
   render() {
     return (
       <div className='add-product-form-main'>
-        <h4 className="form-title">Add new category</h4>
-        <ToastsContainer
-          store={ToastsStore}
-          position={ToastsContainerPosition.TOP_RIGHT}
-          lightBackground
-        />
+        <h4 className="form-title"> Edit category</h4>
         <Form onSubmit={this.handleFormSubmit}>
           <Form.Group controlId="formGroupName">
             <Form.Label>Name</Form.Label>
@@ -72,12 +74,12 @@ class CategoryAddComponent extends Component {
             />
           </Form.Group>
           <Form.Label>Description</Form.Label>
-          <Form.Group controlId="formGroupDescription">
-            <Form.Control as="textarea" rows="10"
+          <Form.Group controlId="formGroupComment">
+            <Form.Control as="textarea" rows="3"
               size="sm"
               type="text"
-              placeholder="Add description"
-              name="description"
+              placeholder="description"
+              name="comment"
               value={this.state.description}
               onChange={e => { this.handleChange(e) }}
             />
@@ -89,4 +91,4 @@ class CategoryAddComponent extends Component {
   }
 }
 
-export default withRouter(CategoryAddComponent);
+export default withRouter(CategoryEditComponent);
