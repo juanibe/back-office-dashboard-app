@@ -13,6 +13,7 @@ exports.create = function (req, res) {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name
   const address = req.body.address
+  const email = req.body.email
   const phone = req.body.phone;
   const web = req.body.web;
   const comment = req.body.comment;
@@ -21,6 +22,7 @@ exports.create = function (req, res) {
     first_name,
     last_name,
     address,
+    email,
     phone,
     web,
     comment
