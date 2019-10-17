@@ -16,7 +16,6 @@ exports.index = function (req, res) {
     { filters.name = name }
   }
 
-
   Product.listWithCategory(filters, category).then(response => {
     res.json({ result: response })
   })

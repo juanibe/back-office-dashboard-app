@@ -1,14 +1,21 @@
 [
   {
+    "group": "admin",
+    "permissions": [
+      {
+        "resource": "*",
+        "methods": "*",
+        "action": "allow"
+      }
+    ]
+  },
+  {
     "group": "employee",
     "permissions": [
       {
         "resource": "*",
         "methods": [
-          "POST",
-          "PUT",
-          "GET",
-          "DELETE"
+          "GET"
         ],
         "action": "allow"
       }
