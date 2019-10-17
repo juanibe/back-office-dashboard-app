@@ -16,6 +16,11 @@ import CategoryShowComponent from './categories/CategoryShowComponent'
 import CategoryAddComponent from './categories/CategoryAddComponent'
 import CategoryEditComponent from './categories/CategoryEditComponent'
 
+import ClientIndexComponent from './clients/ClientIndexComponent'
+import ClientShowComponent from './clients/ClientShowComponent'
+import ClientAddComponent from './clients/ClientAddComponent'
+import ClientEditComponent from './clients/ClientEditComponent'
+
 
 class Wrapper extends Component {
   constructor(props) {
@@ -35,12 +40,14 @@ class Wrapper extends Component {
             <Route exact path={'/products/:id/show'} component={ProductShowComponent} />
             <Route exact path={'/products/add'} component={ProductAddComponent} />
             <Route exact path={'/products/:id/edit'} component={ProductEditComponent} />
-            <Route exact path={'/products/:id/delete'} component={ProductShowComponent} />
             <Route exact path={'/categories'} component={CategoryIndexComponent} />
             <Route exact path={'/categories/:id/show'} component={CategoryShowComponent} />
             <Route exact path={'/categories/add'} component={CategoryAddComponent} />
             <Route exact path={'/categories/:id/edit'} component={CategoryEditComponent} />
-            <Route exact path={'/categories/:id/delete'} component={CategoryShowComponent} />
+            <Route exact path={'/clients'} component={ClientIndexComponent} />
+            <Route exact path={'/clients/:id/show'} component={ClientShowComponent} />
+            <Route exact path={'/clients/add'} component={ClientAddComponent} />
+            <Route exact path={'/clients/:id/edit'} component={ClientEditComponent} />
           </SideBar>
         </AuthenticatedComponent>
       </div >
