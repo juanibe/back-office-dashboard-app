@@ -91,6 +91,7 @@ class ProductIndexComponent extends Component {
   }
 
   render() {
+    console.log(this.state.user)
     if (this.state.products === null || this.state.categories === null) {
       return (
         <div>Loading...</div>
@@ -166,9 +167,15 @@ class ProductIndexComponent extends Component {
                 {
                   Header: "",
                   Cell: row => [
-                    <Link to={`products/${row.original._id}/show`} params={{ id: row.original._id }}><button className="btn btn-light"><img src={eye} /></button></Link>,
-                    <Link to={`products/${row.original._id}/edit`} ><button className="btn btn-light"><img src={writing} /></button></Link>,
-                    <span><button className="btn btn-light" onClick={() => this.setState({ alert: true, product: row.original._id })}><img src={bin} /></button></span>]
+                    <Link to={`products/${row.original._id}/show`} params={{ id: row.original._id }}>
+                      <button className="btn btn-light"><img src={eye} /></button>
+                    </Link>,
+                    <Link to={`products/${row.original._id}/edit`} >
+                      <button className="btn btn-light"><img src={writing} /></button>
+                    </Link>,
+                    <span>
+                      <button className="btn btn-light" onClick={() => this.setState({ alert: true, product: row.original._id })}><img src={bin} /></button>
+                    </span>]
                 }
               ]
             }

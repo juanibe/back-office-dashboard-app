@@ -29,7 +29,6 @@ class Wrapper extends Component {
     }
   }
 
-
   render() {
     return (
       <div>

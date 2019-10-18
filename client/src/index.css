@@ -1,4 +1,4 @@
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 800px) {
   .card{
     margin-bottom: 20px;
   }
@@ -111,4 +111,11 @@ li{
   position: relative;
   left: 30%;
   margin: 30px;
+}
+
+.message-unauthorized{
+  margin: 5px;
+  text-align: center;
+  color: red;
+  border: solid 1px red;
 }

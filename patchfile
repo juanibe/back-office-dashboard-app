@@ -1,0 +1,42 @@
+diff --git a/client/src/components/products/ProductIndexComponent.js b/client/src/components/products/ProductIndexComponent.js
+index e91e41d..a31cce9 100644
+--- a/client/src/components/products/ProductIndexComponent.js
++++ b/client/src/components/products/ProductIndexComponent.js
+@@ -13,6 +13,7 @@ class ProductIndexComponent extends Component {
+   constructor(props) {
+     super(props)
+     this.state = {
++      filters: [],
+       data: [],
+       pages: null,
+       products: []
+@@ -60,7 +61,6 @@ class ProductIndexComponent extends Component {
+         <hr />
+         <ReactTable
+           loading={this.state.loading}
+-          onFetchData={this.state.fetchData}
+           data={this.state.data}
+           pages={this.state.pages}
+           filterable
+@@ -75,6 +75,12 @@ class ProductIndexComponent extends Component {
+                 {
+                   Header: "Availability",
+                   accessor: "available",
++                  Filter: () =>
++                    <select value={this.state.value} >
++                      <option value="available=9">All</option>
++                      <option value='available=1'>Available</option>
++                      <option value='available=0'>Not available</option>
++                    </select>
+                 },
+                 {
+                   Header: "Category",
+@@ -108,7 +114,7 @@ class ProductIndexComponent extends Component {
+             axios.get(`http://localhost:3001/api/v1/products`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+               .then(res => {
+                 this.setState({
+-                  posts: res.data,
++                  products: res.data.result,
+                   data: res.data.result.slice(low, high),
+                   pages: res.data.pages,
+                   loading: false

@@ -3,8 +3,6 @@ import { getJwt } from '../helpers/jwt'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 
-
-
 class AuthenticatedComponent extends Component {
   constructor(props) {
     super(props)
@@ -20,6 +18,7 @@ class AuthenticatedComponent extends Component {
     }
     axios.get('http://localhost:3001/api/v1/get-user', { headers: { Authorization: `Bearer ${jwt}` } })
       .then(response => {
+        console.log('USER', response.data)
         this.setState({
           user: response.data
         })
@@ -35,6 +34,7 @@ class AuthenticatedComponent extends Component {
         <div>Loading...</div>
       )
     }
+
     return (
       <div>
         {this.props.children}

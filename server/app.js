@@ -48,7 +48,7 @@ app.use(passport.initialize());
 //app.use(passport.session());
 
 acl.config({
-  baseUrl: '/api/v1',
+  baseUrl: '/api/v1/',
   decodedObjectName: 'user',
   roleSearchPath: 'user.role'
 });
