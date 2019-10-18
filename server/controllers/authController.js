@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const User = require("../models/User");
 const Group = require("../models/Group");
+const jwtDecode = require('jwt-decode');
+
 
 exports.register = function (req, res) {
 
@@ -81,7 +83,7 @@ exports.login = (req, res, next) => {
       if (response) {
         const payload = { id: user.id };
         const token = jwt.sign(payload, 'Secret');
-        res.json({ token: token });
+        res.json({ token: token, user: user });
       } else {
         return res.json({ success: false, message: 'Passwords do not match' });
       }
@@ -91,7 +93,12 @@ exports.login = (req, res, next) => {
 }
 
 exports.getUser = function (req, res, next) {
-  res.send(req.user)
+  let token = req.headers.authorization
+  let decoded = jwtDecode(token)
+  console.log(decoded)
+  User.findById(decoded.id).then(response => {
+    res.json({ user: response })
+  })
 }
 
 exports.logout = function (req, res, next) {
