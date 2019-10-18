@@ -13,7 +13,18 @@
     "group": "employee",
     "permissions": [
       {
-        "resource": "*",
+        "resource": [
+          "products/*"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "action": "allow"
+      },
+      {
+        "resource": [
+          "categories/*"
+        ],
         "methods": [
           "GET"
         ],
