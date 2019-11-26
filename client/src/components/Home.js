@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { getJwt } from '../helpers/jwt'
 import axios from 'axios'
-
 import HomeProductCard from './cards/HomeProductCard'
 import HomeCategoryCard from './cards/HomeCategoryCard'
 import HomeClientCard from './cards/HomeClientCard'
@@ -42,7 +41,7 @@ class Home extends Component {
     axios.get('http://localhost:3001/api/v1/categories', { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         this.setState({
-          categories: response.data
+          categories: response.data.result
         })
       })
   }

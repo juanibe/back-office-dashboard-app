@@ -3,6 +3,9 @@ import { withRouter, Link } from 'react-router-dom'
 import Sidebar from "react-sidebar";
 import axios from "axios";
 
+import profilePic from '../../src/img/profile4.png'
+import home from '../../src/img/home.png'
+
 const mql = window.matchMedia(`(min-width: 800px)`);
 
 class SideBar extends Component {
@@ -41,14 +44,18 @@ class SideBar extends Component {
 
   render() {
     return (
-      <div>
+      <div className="side-bar-general">
         <Sidebar
           sidebar={
             <div>
-              <img src="" />
+              <ul>
+                <img className="profile-pic" src={profilePic} />
+                <li>Juan Ignacio Benito</li>
+                <li>Admin</li>
+              </ul>
               <ul className="nav-list">
                 <li className="nav-item">
-                  <Link to="/" className='btn'>Home</Link>
+                  <Link to="/" className='btn'><img src={home} /> Home</Link>
                 </li>
                 <li className="nav-item">
                   <Link to="/products" className='btn'>Products</Link>
@@ -68,7 +75,7 @@ class SideBar extends Component {
               </ul>
               <ul className="">
                 <li>
-                  <button onClick={this.logout} className='btn btn-logout btn-light'>Logout</button>
+                  <button onClick={this.logout} >Logout</button>
                 </li>
               </ul>
             </div>
@@ -79,7 +86,7 @@ class SideBar extends Component {
           styles={{
             sidebar: {
               background: '#0292B7',
-              width: '12em'
+              width: '10em'
             },
 
           }}
