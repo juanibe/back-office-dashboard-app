@@ -3,8 +3,8 @@ const Category = require('../models/Category');
 
 exports.index = function (req, res) {
   console.log(req.query.test)
-  Category.find({}).then((categories) => {
-    res.send(categories)
+  Category.find({}).then((response) => {
+    res.json({ result: response })
   });
 }
 
