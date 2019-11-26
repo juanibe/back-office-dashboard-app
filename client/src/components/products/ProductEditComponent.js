@@ -24,18 +24,17 @@ class ProductEditComponent extends Component {
 
     axios.get('http://localhost:3001/api/v1/categories', { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
-        this.setState({ categories: response.data })
+        this.setState({ categories: response.data.result })
       })
 
     axios.get(`http://localhost:3001/api/v1/products/${this.props.match.params.id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
-        console.log(response.data.available)
         this.setState({
           name: response.data.name,
           description: response.data.description,
           comment: response.data.comment,
           price: response.data.price,
-          category: response.data.category[0]._id,
+          category: response.data.category,
           available: response.data.available,
         })
       })

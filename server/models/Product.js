@@ -25,7 +25,7 @@ const ProductSchema = new Schema({
   state: {
     type: String,
     maxlength: 64,
-    minlength: 1
+    minlength: 0
   },
 
   available: {
@@ -46,30 +46,6 @@ const ProductSchema = new Schema({
   {
     timestamps: true
   });
-
-
-ProductSchema.statics.listWithCategory = function (filters, category) {
-  return new Promise((resolve, reject) => {
-    const query = Product.find(filters).populate({ path: 'category' })
-    if (category) {
-      query.exec(function (error, products) {
-        products = products.filter((product) => {
-          return product.category[0].name === category
-        })
-        resolve(products)
-      })
-    } else {
-      query.exec()
-        .then(response => {
-          products = response
-          resolve(products)
-        }).catch(error => {
-          reject(error)
-        })
-    }
-  })
-}
-
 
 // Compile model from Schema
 const Product = mongoose.model('Product', ProductSchema);

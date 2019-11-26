@@ -1,29 +1,13 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const ProductRepository = require('../repositories/productRepository')
 
 exports.index = function (req, res) {
-  console.log(req.query)
-  const filters = {}
-  const available = req.query.available
-  const category = req.query.category
-  const name = req.query.name
 
-  if (available) {
-    { filters.available = available }
-  }
-
-  if (name) {
-    { filters.name = name }
-  }
-
-  Product.listWithCategory(filters, category).then(response => {
-    res.json({ result: response })
-  })
-}
-
-exports.test1 = function (req, res) {
-
-  res.send(200)
+  ProductRepository.applyFilters(req.query.filtered)
+    .then(response => {
+      res.json({ result: response })
+    })
 }
 
 exports.create = function (req, res) {
@@ -47,6 +31,7 @@ exports.create = function (req, res) {
       state,
       available
     });
+
     product.save(err => {
       if (err) {
         res

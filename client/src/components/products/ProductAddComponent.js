@@ -24,7 +24,7 @@ class ProductAddComponent extends Component {
     const jwt = getJwt()
     axios.get('http://localhost:3001/api/v1/categories', { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
-        this.setState({ categories: response.data })
+        this.setState({ categories: response.data.result })
       })
   }
 
