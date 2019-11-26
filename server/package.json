@@ -21,15 +21,12 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "mongoose": "^5.7.0",
-    "mongoose-data-seed": "^2.1.4",
-    "mongoose-seeder": "^1.2.1",
     "morgan": "^1.9.0",
     "node-sass-middleware": "^0.11.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "passport-oauth": "^1.0.0",
-    "query-string": "^6.9.0",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
