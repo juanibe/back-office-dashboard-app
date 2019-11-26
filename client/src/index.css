@@ -38,7 +38,7 @@ code {
 }
 
 .main-content{
-  margin: 25px;
+  margin: 50px;
 }
 
 .card {
@@ -47,13 +47,14 @@ code {
 
 .home-card{
   margin: 0 auto;
-
 }
 
-.btn-logout{
-  position: fixed;
-  bottom: 80px;
-  left: 30%
+.profile-pic{
+  width: 60%;
+  position: relative;
+  left: 20%;
+  margin: 30px 0 30px 0;
+  
 }
 
 .btn-opt{
@@ -64,10 +65,20 @@ code {
   margin: 10px;
 }
 
+
 .nav-list{
-  position: fixed;
-  bottom: 55%;
-  left: 13%;
+  width: 100%;
+  color:white;
+}
+
+.nav-item{
+  width:100%;
+  color:white;
+  font-size: 1.5em !important;
+}
+
+.nav-item:hover{
+  background-color:#0C6980;
 }
 
 ul{
@@ -75,7 +86,6 @@ ul{
 }
 li{
   list-style-type: none;
-  margin: 1em;
   text-align: center;
 }
 
