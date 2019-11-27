@@ -3,8 +3,10 @@ const Category = require('../models/Category');
 const ProductRepository = require('../repositories/productRepository')
 
 exports.index = function (req, res) {
+  const filtered = req.query.filtered
+  const sorted = req.query.sorted
 
-  ProductRepository.applyFilters(req.query.filtered)
+  ProductRepository.applyFilters(filtered, sorted)
     .then(response => {
       res.json({ result: response })
     })

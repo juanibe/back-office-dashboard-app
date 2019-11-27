@@ -1,9 +1,16 @@
 const Product = require('../models/Product');
+const ProductRepository = require('../repositories/productRepository')
 
-exports.applyFilters = function (filtered) {
+
+exports.applyFilters = function (filtered, sorted) {
+  let sort = {}
   const filters = transformToFilters(filtered)
+
+  if (sorted) {
+    sort = transformSortToObject(sorted)
+  }
   return new Promise((resolve, reject) => {
-    const query = Product.find(filters).populate({ path: 'category' })
+    const query = Product.find(filters).populate({ path: 'category' }).sort(sort)
     query.exec()
       .then(response => {
         products = response
@@ -12,6 +19,15 @@ exports.applyFilters = function (filtered) {
         console.log(error)
       })
   })
+}
+
+transformSortToObject = function (queryString) {
+  let sorted = {}
+  let sort = JSON.parse(queryString)
+  let id = sort.id
+  let desc = sort.desc
+  desc === false ? sorted[id] = -1 : sorted[id] = 1
+  return sorted
 }
 
 transformToFilters = function (queryString) {
