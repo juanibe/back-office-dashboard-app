@@ -1,12 +1,14 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
-const ProductRepository = require('../repositories/productRepository')
+const GeneralRepository = require('../repositories/generalRepository');
 
 exports.index = function (req, res) {
   const filtered = req.query.filtered
   const sorted = req.query.sorted
+  const pageSize = req.query.pageSize
+  const page = req.query.page
 
-  ProductRepository.applyFilters(filtered, sorted)
+  GeneralRepository.applyFilters('Product', filtered, sorted, pageSize, page)
     .then(response => {
       res.json({ result: response })
     })

@@ -4,7 +4,6 @@ import ReactTable from 'react-table';
 import { Link, withRouter } from 'react-router-dom';
 import axios from "axios";
 import { getJwt } from '../helpers/jwt'
-
 import eye from '../img/eye.png'
 import bin from '../img/bin.png'
 import writing from '../img/writing.png'
@@ -16,7 +15,8 @@ class CustomReactTable extends Component {
     this.state = {
       data: [],
       showDelete: false,
-      item: null
+      item: null,
+      pages: null,
     }
   }
 
@@ -25,24 +25,22 @@ class CustomReactTable extends Component {
     if (!jwt) {
       this.props.history.push('/login')
     }
-
     let config = {
       headers: { 'Authorization': `Bearer ${jwt}` },
       params: {
-        pages: state.page,
+        page: state.page,
         pageSize: state.pageSize,
         sorted: state.sorted,
         filtered: state.filtered
       }
     }
-
     this.setState({ loading: true })
 
     axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}`, config)
       .then(response => {
+        console.log(response)
         this.setState({
           data: response.data.result,
-          pages: response.data.pages,
           loading: false
         })
       })
@@ -68,13 +66,7 @@ class CustomReactTable extends Component {
   }
 
   componentDidMount() {
-    const jwt = getJwt()
-    axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}`,
-      { headers: { 'Authorization': `Bearer ${jwt}` } })
-      .then(response => {
-        console.log(response.data.result)
-        this.setState({ data: response.data.result })
-      })
+
     this.loadOptions()
   }
 
@@ -89,6 +81,8 @@ class CustomReactTable extends Component {
           columns={this.props.columns}
           manual
           onFetchData={this.onFetchData}
+          defaultPageSize={10}
+          pages={this.state.pages}
         >
         </ReactTable>
       </div >

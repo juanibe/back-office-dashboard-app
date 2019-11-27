@@ -1,16 +1,28 @@
-const Product = require('../models/Product');
-const ProductRepository = require('../repositories/productRepository')
+const mongoose = require('mongoose');
 
 
-exports.applyFilters = function (filtered, sorted) {
+exports.applyFilters = function (modelName, filtered, sorted, pageSize, page) {
+
+  let Model = mongoose.model(modelName)
+
   let sort = {}
-  const filters = transformToFilters(filtered)
 
-  if (sorted) {
-    sort = transformSortToObject(sorted)
-  }
+  const filters = transformFiltersToObject(filtered)
+
+  if (sorted) sort = transformSortToObject(sorted)
+
+  if (pageSize) var recordsPerPage = parseInt(pageSize)
+
+  if (page) var pageNo = parseInt(page)
+
   return new Promise((resolve, reject) => {
-    const query = Product.find(filters).populate({ path: 'category' }).sort(sort)
+    const query = Model
+      .count()
+      .find(filters)
+      .sort(sort)
+      .skip(recordsPerPage * (pageNo))
+      .limit(recordsPerPage)
+      .populate({ path: 'category' })
     query.exec()
       .then(response => {
         products = response
@@ -30,7 +42,7 @@ transformSortToObject = function (queryString) {
   return sorted
 }
 
-transformToFilters = function (queryString) {
+transformFiltersToObject = function (queryString) {
   let filtered = {}
   let filters = []
 
