@@ -21,6 +21,9 @@ import ClientShowComponent from './clients/ClientShowComponent'
 import ClientAddComponent from './clients/ClientAddComponent'
 import ClientEditComponent from './clients/ClientEditComponent'
 
+import EventIndexComponent from './events/EventIndexComponent'
+import EventAddComponent from './events/EventAddComponent'
+
 
 class Wrapper extends Component {
   constructor(props) {
@@ -47,6 +50,8 @@ class Wrapper extends Component {
             <Route exact path={'/clients/:id/show'} component={ClientShowComponent} />
             <Route exact path={'/clients/add'} component={ClientAddComponent} />
             <Route exact path={'/clients/:id/edit'} component={ClientEditComponent} />
+            <Route exact path={'/events'} component={EventIndexComponent} />
+            <Route exact path={'/events/add'} component={EventAddComponent} />
           </SideBar>
         </AuthenticatedComponent>
       </div >

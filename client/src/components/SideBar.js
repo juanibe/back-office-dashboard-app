@@ -19,6 +19,23 @@ class SideBar extends Component {
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
 
+  listItems = () => {
+    const items = [
+      { id: 'a', value: 'Home', route: '/' },
+      { id: 'b', value: 'Products', route: '/products' },
+      { id: 'c', value: 'Categories', route: '/categories' },
+      { id: 'd', value: 'Clients', route: '/clients' },
+      { id: 'e', value: 'Events', route: '/events' },
+      { id: 'f', value: 'Accounts', route: '/accounts' },
+      { id: 'g', value: 'Admin', route: 'admin' },
+      { id: 'h', value: 'Stats', route: '/stats' },
+      { id: 'i', value: 'Help', route: '/help' }
+    ]
+    return items.map((item) => {
+      return <li className="nav-item" key={item.id}><Link to={item.route} className='btn'>{item.value}</Link></li>
+    })
+  }
+
   onSetSidebarOpen(open) {
     this.setState({ sidebarOpen: open });
   }
@@ -53,30 +70,8 @@ class SideBar extends Component {
                 <li>Juan Ignacio Benito</li>
                 <li>Admin</li>
               </ul>
-              <ul className="nav-list">
-                <li className="nav-item">
-                  <Link to="/" className='btn'><img src={home} /> Home</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/products" className='btn'>Products</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/categories" className='btn'>Categories</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/clients" className='btn'>Clients</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="#" className='btn'>Stats</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="#" className='btn'>Admin</Link>
-                </li>
-              </ul>
-              <ul className="">
-                <li>
-                  <button onClick={this.logout} >Logout</button>
-                </li>
+              <ul>
+                {this.listItems()}
               </ul>
             </div>
           }
