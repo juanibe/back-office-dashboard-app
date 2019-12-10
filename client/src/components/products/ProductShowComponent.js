@@ -58,15 +58,21 @@ class ProductShowComponent extends Component {
             You will delete this product premanently...
           </SweetAlert>
         )}
-        <div class="card text-center">
-          <div class="card-header">
+        <div className="card text-center">
+          <div className="card-header">
             Featured
   </div>
-          <div class="card-body">
-            <h5 class="card-title">Name: <b>{this.state.product.name}</b></h5>
-            <div class="card-text">
+          <div className="card-body">
+            <h5 className="card-title">Name: <b>{this.state.product.name}</b></h5>
+            <div className="card-text">
               <ul>
-                <li>Category: <b>{this.state.product.category[0].name}</b></li>
+                <li>Categories:
+                  <ul>
+                    {this.state.product.category.map(category => {
+                      return <li><b>{category.name}</b></li>
+                    })}
+                  </ul>
+                </li>
                 <li>Price: <b>{this.state.product.price}</b></li>
                 <li>State: <b>{this.state.product.state}</b></li>
               </ul>
@@ -75,7 +81,7 @@ class ProductShowComponent extends Component {
             <button className="btn btn-light" onClick={this.props.history.goBack}><img src={writing} /></button>
             <span><button className="btn btn-light" onClick={() => this.setState({ alert: true })}><img src={bin} /></button></span>
           </div>
-          <div class="card-footer text-muted">
+          <div className="card-footer text-muted">
             2 days ago
   </div>
         </div>

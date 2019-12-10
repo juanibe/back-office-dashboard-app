@@ -14,7 +14,7 @@ class ProductEditComponent extends Component {
       comment: "",
       price: 0,
       category: "",
-      available: null,
+      available: "",
       categories: []
     }
   }
@@ -138,7 +138,6 @@ class ProductEditComponent extends Component {
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Category</Form.Label>
             <Form.Control as="select"
-              defaultValue={this.state.category}
               size="sm"
               type="text"
               placeholder="Category type"
@@ -147,17 +146,15 @@ class ProductEditComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             >
               {this.state.categories.map((response, index) => {
-                return <option key={index} value={response._id}>{response.name}</option>
+                return <option key={response._id} value={response._id}>{response.name}</option>
               })}
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="formGroupAvailable">
             <Form.Check
-              onChange={this.toggleChange}
               checked={this.state.available}
               type="checkbox"
               label='Available'
-              value={this.state.available}
               onChange={e => { this.toggleChange(e) }}
             />
           </Form.Group>

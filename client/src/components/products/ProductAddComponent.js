@@ -3,13 +3,15 @@ import Form from "react-bootstrap/Form";
 import axios from 'axios'
 import { getJwt } from '../../helpers/jwt'
 import { BrowserRouter, Route, withRouter } from 'react-router-dom'
+import Select from 'react-select'
+
 
 
 class ProductAddComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      categories: null,
+      categories: "",
       name: "",
       description: "",
       comment: "",
@@ -30,7 +32,6 @@ class ProductAddComponent extends Component {
 
   toggleChange = () => {
     this.setState({ available: !this.state.available })
-    console.log(this.state.available)
   }
 
   handleFormSubmit = event => {
@@ -65,15 +66,33 @@ class ProductAddComponent extends Component {
     })
   }
 
+  handleMultipleSelectChange = event => {
+    const values = [];
+    if (event) {
+      event.map(value => {
+        values.push(value.value)
+      })
+    }
+    this.setState({
+      category: values
+    });
+  }
+
   handleChange = event => {
     const { name, value } = event.target;
-    console.log(value)
     this.setState({
       [name]: value
     });
   };
 
+  loadOptions = () => {
+    return this.state.categories.map(category => {
+      return { value: category.name, label: category.name }
+    })
+  }
+
   render() {
+    console.log(this.state.category)
     if (!this.state.categories) {
       return (
         <div>Loading...</div>
@@ -128,8 +147,9 @@ class ProductAddComponent extends Component {
             />
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label>Category</Form.Label>
-            <Form.Control as="select"
+            <Form.Label>Categories</Form.Label>
+            <Select options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
+            {/* <Form.Control as="select"
               size="sm"
               type="text"
               placeholder="Category type"
@@ -140,7 +160,7 @@ class ProductAddComponent extends Component {
               {this.state.categories.map((response, index) => {
                 return <option key={index} value={response.name}>{response.name}</option>
               })}
-            </Form.Control>
+            </Form.Control> */}
           </Form.Group>
           <Form.Group controlId="formGroupAvailable">
             <Form.Check

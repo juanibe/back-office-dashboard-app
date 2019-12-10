@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import CustomReactTable from "../CustomReactTable";
-import InputRange from 'react-input-range';
 import { withRouter } from 'react-router-dom';
 import axios from "axios";
 import { getJwt } from '../../helpers/jwt'
-import "react-input-range/lib/css/index.css"
+import check from '../../img/check.png'
+import uncheck from '../../img/uncheck.png'
 
 class ProductIndexComponent extends Component {
   constructor(props) {
@@ -17,16 +17,35 @@ class ProductIndexComponent extends Component {
           filterable: true,
         },
         {
+          id: 'category',
           Header: 'Category',
-          accessor: 'category[0].name',
+          accessor: 'category',
+          Cell: row => {
+            if (row.row.category.length > 1) {
+              return (
+                <div>
+                  {row.row.category[0].name} <b>(+)</b>
+                </div>
+              )
+            } else if (row.row.category.length === 1) {
+              return (
+                <div>{row.row.category[0].name}</div>
+              )
+            } else {
+              return (
+                <div><b>-</b></div>
+              )
+            }
+          },
+
           filterable: true,
           id: 'category',
           Filter: ({ filter, onChange }) =>
-            <select onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined} >
+            <select style={{ width: "100%", height: "100%" }} onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined} >
               <option value={""}>Show All</option>
               {this.state.categories.map((category, index) => {
                 return (
-                  <option value={category._id}>{category.name}</option>
+                  <option key={category._id} value={category._id}>{category.name}</option>
                 )
               })}
             </select>
@@ -36,17 +55,12 @@ class ProductIndexComponent extends Component {
           Header: 'Available',
           filterable: true,
           Filter: ({ filter, onChange }) =>
-            <select onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined}>
-              <option value={''}>All</option>
+            <select style={{ width: "100%", height: "100%" }} onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined}>
+              <option value={''}>Show All</option>
               <option value={1}>Available</option>
               <option value={0}>Not avilable</option>
             </select>,
-          accessor: d => d.available ? "Yes" : "No"
-        },
-        {
-          Header: 'Price',
-          accessor: 'price',
-          filterable: false,
+          accessor: d => d.available ? <img src={check} style={{ width: '1em' }} /> : <img src={uncheck} style={{ width: '1em' }} />
         },
       ],
       categories: [],
@@ -64,11 +78,10 @@ class ProductIndexComponent extends Component {
       })
   }
 
-
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} />
+        <CustomReactTable columns={this.state.columns} modelName={"Products"} />
       </div >
     )
   }
