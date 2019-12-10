@@ -44,8 +44,19 @@ const ProductSchema = new Schema({
   },
 },
   {
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
+  },
+  {
     timestamps: true
   });
+
+
+
+ProductSchema.virtual('modelName')
+  .get(function () {
+    return 'Product'
+  })
 
 const Product = mongoose.model('Product', ProductSchema);
 

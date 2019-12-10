@@ -48,31 +48,20 @@ const ClientSchema = new Schema({
   },
 },
   {
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
+  },
+  {
     timestamps: true
-  });
+  },
+);
 
 
-// ClientSchema.statics.listWithCategory = function (filters, category) {
-//   return new Promise((resolve, reject) => {
-//     const query = Product.find(filters).populate({ path: 'category' })
-//     if (category) {
-//       query.exec(function (error, products) {
-//         products = products.filter((product) => {
-//           return product.category[0].name === category
-//         })
-//         resolve(products)
-//       })
-//     } else {
-//       query.exec()
-//         .then(response => {
-//           products = response
-//           resolve(products)
-//         }).catch(error => {
-//           reject(error)
-//         })
-//     }
-//   })
-// }
+ClientSchema.virtual('full_name')
+  .get(function () {
+    return `${this.first_name} ${this.last_name}`
+  })
+
 
 
 // Compile model from Schema

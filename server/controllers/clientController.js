@@ -1,11 +1,18 @@
 const Client = require('../models/Client');
+const GeneralRepository = require('../repositories/generalRepository');
 
 
 exports.index = function (req, res) {
 
-  Client.find({}).then((clients) => {
-    res.send(clients)
-  });
+  const filtered = req.query.filtered
+  const sorted = req.query.sorted
+  const pageSize = req.query.pageSize
+  const page = req.query.page
+
+  GeneralRepository.applyFilters('Client', filtered, sorted, pageSize, page)
+    .then(response => {
+      res.json({ result: response })
+    })
 }
 
 exports.create = function (req, res) {
@@ -66,4 +73,13 @@ exports.delete = function (req, res) {
     }
     return res.status(200).send(response);
   })
+}
+
+exports.countDocuments = function (req, res) {
+  GeneralRepository.countDocuments('Client', req.query.filtered)
+    .then(response => {
+      res.json({ result: response })
+    }).catch(error => {
+      console.log(error)
+    })
 }

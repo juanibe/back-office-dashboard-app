@@ -3,6 +3,7 @@ const Category = require('../models/Category');
 const GeneralRepository = require('../repositories/generalRepository');
 
 exports.index = function (req, res) {
+
   const filtered = req.query.filtered
   const sorted = req.query.sorted
   const pageSize = req.query.pageSize
@@ -24,7 +25,7 @@ exports.create = function (req, res) {
   const state = req.body.data.state;
   const available = req.body.data.available
 
-  Category.findOne({ name: category }).then(category => {
+  Category.find({ name: { $in: category } }).then(category => {
 
     const product = new Product({
       name,
@@ -80,4 +81,13 @@ exports.delete = function (req, res) {
     }
     return res.status(200).send(response);
   })
+}
+
+exports.countDocuments = function (req, res) {
+  GeneralRepository.countDocuments('Product', req.query.filtered)
+    .then(response => {
+      res.json({ result: response })
+    }).catch(error => {
+      console.log(error)
+    })
 }

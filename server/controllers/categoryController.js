@@ -32,7 +32,6 @@ exports.create = function (req, res) {
 
 exports.show = function (req, res) {
   const id = req.params.id;
-  console.log(req.query)
 
   Category.findById(id).then((category) => {
 
@@ -60,4 +59,13 @@ exports.delete = function (req, res) {
     }
     return res.status(200).send(response);
   })
+}
+
+exports.countDocuments = function (req, res) {
+  GeneralRepository.countDocuments('Category', req.query.filtered)
+    .then(response => {
+      res.json({ result: response })
+    }).catch(error => {
+      console.log(error)
+    })
 }
