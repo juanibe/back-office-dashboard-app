@@ -17,14 +17,19 @@ class CustomReactTable extends Component {
       showDelete: false,
       item: null,
       pages: null,
+      totalItems: null,
+      loading: false,
+      state: {},
     }
   }
 
-  onFetchData = (state, instance) => {
+  fetchData = (state) => {
+    this.setState({ state: state })
     const jwt = getJwt()
     if (!jwt) {
       this.props.history.push('/login')
     }
+
     let config = {
       headers: { 'Authorization': `Bearer ${jwt}` },
       params: {
@@ -38,10 +43,17 @@ class CustomReactTable extends Component {
 
     axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}`, config)
       .then(response => {
-        console.log(response)
         this.setState({
           data: response.data.result,
           loading: false
+        })
+      })
+
+    axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}/count-documents`, config)
+      .then(response => {
+        this.setState({
+          totalItems: response.data.result,
+          pages: Math.ceil(response.data.result / state.pageSize)
         })
       })
   }
@@ -49,12 +61,26 @@ class CustomReactTable extends Component {
   loadOptions = () => {
     this.props.columns.push({
       Header: "",
-      Cell: row => [
-        <Link to={`${this.props.location.pathname}/${row.original._id}/show`} params={{ id: row.original._id }}><button className="btn btn-light"><img src={eye} /></button></Link>,
-        <Link to={`${this.props.location.pathname}/${row.original._id}/edit`}><button className="btn btn-light"><img src={writing} /></button></Link>,
-        <button className="btn btn-light" onClick={() => { this.onClickDeleteButton(row.original._id) }}><img src={bin} /></button>
+      Cell: (row) => [
+        // Find a better way to add unique key
+        <Link to={`${this.props.location.pathname}/${row.original._id}/show`} key={row.original._id} params={{ id: row.original._id }}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={eye} /></button></Link>,
+        <Link to={`${this.props.location.pathname}/${row.original._id}/edit`} key={row.original._id + 'a'}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={writing} /></button></Link>,
+        <button key={row.original._id + 'b'} className="btn-xs btn-outline-light" onClick={() => { this.onClickDeleteButton(row.original._id) }}><img style={{ width: '1em' }} src={bin} /></button>
       ]
     })
+  }
+
+  loadFunctionalities = () => {
+    return (
+      <div className='functionalities-react-table'>
+        <span className='functionalities-add-item-table'>
+          <Link to={`${this.props.location.pathname}/add`}><button className="btn-sm btn-outline-success">Add new {this.props.modelName}</button></Link>
+        </span>
+        <span className='functionalities-refresh-table'>
+          <button className="btn-sm btn-outline-dark">Refresh table</button>
+        </span>
+      </div>
+    )
   }
 
   onClickDeleteButton = (id) => {
@@ -66,25 +92,35 @@ class CustomReactTable extends Component {
   }
 
   componentDidMount() {
-
     this.loadOptions()
+  }
+
+  reloadData = () => {
+    this.fetchData(this.state.state)
   }
 
   render() {
     return (
       <div className='main-content'>
         {this.state.showDelete && (
-          <DeleteComponent onCancelDeleteClick={this.onCancelDeleteClick} item={this.state.item} />
+          <DeleteComponent
+            reloadData={this.reloadData}
+            onCancelDeleteClick={this.onCancelDeleteClick}
+            item={this.state.item} />
         )}
+        <h3>{`${this.props.modelName} (${this.state.totalItems})`}</h3>
+        {this.loadFunctionalities()}
         <ReactTable
           data={this.state.data}
           columns={this.props.columns}
           manual
-          onFetchData={this.onFetchData}
+          onFetchData={this.fetchData}
           defaultPageSize={10}
           pages={this.state.pages}
+          style={{ fontSize: '0.9em' }}
         >
         </ReactTable>
+        <div className="total-records-tag">{this.props.modelName}: {this.state.totalItems}</div>
       </div >
     )
   }

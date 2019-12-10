@@ -17,15 +17,8 @@ class DeleteComponent extends Component {
     axios.delete(`http://localhost:3001/api/v1${this.props.location.pathname}/${this.props.item}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(() => {
         this.props.onCancelDeleteClick()
+        this.props.reloadData(this.state)
       })
-  }
-
-  componentDidMount() {
-    const jwt = getJwt()
-    if (!jwt) {
-      this.props.history.push('/login')
-    }
-
   }
 
   render() {
@@ -39,7 +32,7 @@ class DeleteComponent extends Component {
             confirmBtnBsStyle="danger"
             cancelBtnBsStyle="default"
             title='Are you sure?'
-            onConfirm={() => { this.deleteConfirmation() }}
+            onConfirm={this.deleteConfirmation}
             onCancel={this.props.onCancelDeleteClick}
           >
             You will delete this product premanently...
