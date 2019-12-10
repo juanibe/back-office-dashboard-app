@@ -18,7 +18,7 @@ code {
     monospace;
 }
 
-.home-title{
+.title{
   text-align: center;
   margin: 60px;
 }
@@ -128,4 +128,22 @@ li{
   text-align: center;
   color: red;
   border: solid 1px red;
+}
+
+.total-records-tag{
+  text-align: center;
+  margin: 10px;
+}
+
+.functionalities-react-table{
+  display: block;
+  margin: 10px;
+}
+
+.functionalities-refresh-table{
+  margin: 0 2px 0 0;
+}
+
+.functionalities-add-item-table{
+  margin: 0 2px 0 0;
 }

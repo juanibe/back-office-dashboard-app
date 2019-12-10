@@ -18,7 +18,6 @@ class AuthenticatedComponent extends Component {
     }
     axios.get('http://localhost:3001/api/v1/get-user', { headers: { Authorization: `Bearer ${jwt}` } })
       .then(response => {
-        console.log('USER', response.data)
         this.setState({
           user: response.data
         })
