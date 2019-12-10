@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import CustomReactTable from "../CustomReactTable"
-import { Link } from 'react-router-dom'
-import ReactTable from 'react-table'
 import { getJwt } from '../../helpers/jwt'
-import axios from 'axios'
-import eye from '../../img/eye.png'
-import bin from '../../img/bin.png'
-import writing from '../../img/writing.png'
-import plus from '../../img/plus.png'
 
 
 class ClientIndexComponent extends Component {
@@ -45,7 +38,7 @@ class ClientIndexComponent extends Component {
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} />
+        <CustomReactTable columns={this.state.columns} modelName={"Clients"} />
       </div >
     )
   }
