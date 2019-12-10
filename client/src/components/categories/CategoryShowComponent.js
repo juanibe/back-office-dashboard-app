@@ -34,13 +34,13 @@ class CategoryShowComponent extends Component {
     }
     return (
       <div className="main-content">
-        <div class="card text-center">
-          <div class="card-header">
+        <div className="card text-center">
+          <div className="card-header">
             Featured
   </div>
-          <div class="card-body">
-            <h5 class="card-title">Name: <b>{this.state.category.name}</b></h5>
-            <div class="card-text">
+          <div className="card-body">
+            <h5 className="card-title">Name: <b>{this.state.category.name}</b></h5>
+            <div className="card-text">
               <ul>
                 <li>Description: <b>{this.state.category.description}</b></li>
               </ul>

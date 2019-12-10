@@ -11,18 +11,13 @@ class CategoryIndexComponent extends Component {
     this.state = {
       columns: [
         {
-          Header: "Categories",
-          columns: [
-            {
-              Header: "Name",
-              accessor: "name",
-            },
-            {
-              Header: "Description",
-              accessor: "description"
-            },
-          ]
-        }
+          Header: "Name",
+          accessor: "name",
+        },
+        {
+          Header: "Description",
+          accessor: "description"
+        },
       ]
     }
   }
@@ -34,11 +29,10 @@ class CategoryIndexComponent extends Component {
     }
   }
 
-
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} />
+        <CustomReactTable columns={this.state.columns} modelName={'Category'} />
       </div >
     )
   }
