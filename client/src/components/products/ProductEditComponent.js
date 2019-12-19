@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import axios from 'axios'
 import { getJwt } from '../../helpers/jwt'
 import { withRouter } from 'react-router-dom'
+import Select from 'react-select'
+
 
 
 class ProductEditComponent extends Component {
@@ -13,7 +15,7 @@ class ProductEditComponent extends Component {
       description: "",
       comment: "",
       price: 0,
-      category: "",
+      category: [],
       available: "",
       categories: []
     }
@@ -81,6 +83,24 @@ class ProductEditComponent extends Component {
     });
   };
 
+  handleMultipleSelectChange = event => {
+    const values = [];
+    if (event) {
+      event.map(value => {
+        values.push(value.value)
+      })
+    }
+    this.setState({
+      category: values
+    });
+  }
+
+  loadOptions = () => {
+    return this.state.categories.map(category => {
+      return { value: category._id, label: category.name }
+    })
+  }
+
   render() {
     if (!this.state.categories) {
       return (
@@ -136,8 +156,9 @@ class ProductEditComponent extends Component {
             />
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label>Category</Form.Label>
-            <Form.Control as="select"
+            <Form.Label>Categories</Form.Label>
+            <Select defaultValue={this.state.category} options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
+            {/* <Form.Control as="select"
               size="sm"
               type="text"
               placeholder="Category type"
@@ -146,9 +167,9 @@ class ProductEditComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             >
               {this.state.categories.map((response, index) => {
-                return <option key={response._id} value={response._id}>{response.name}</option>
+                return <option key={index} value={response.name}>{response.name}</option>
               })}
-            </Form.Control>
+            </Form.Control> */}
           </Form.Group>
           <Form.Group controlId="formGroupAvailable">
             <Form.Check
