@@ -47,6 +47,7 @@ class ClientAddComponent extends Component {
       comment
     }
 
+
     const headers = {
       'Authorization': `Bearer ${jwt}`,
     }
@@ -54,7 +55,7 @@ class ClientAddComponent extends Component {
     axios.post('http://localhost:3001/api/v1/events', data, {
       headers: headers,
     }).then(response => {
-      this.props.history.push(`/events/${response.data._id}/show`)
+      this.props.history.push(`/events`)
     }).catch(error => {
       ToastsStore.error("Unauthorized", 10000)
       this.setState({ unauthorized: true })
@@ -76,7 +77,7 @@ class ClientAddComponent extends Component {
       })
     }
     this.setState({
-      category: values
+      product: values
     });
   }
 
@@ -107,7 +108,6 @@ class ClientAddComponent extends Component {
   }
 
   render() {
-    console.log(this.state.date)
     return (
       <div>
         {this.state.unauthorized && (
@@ -141,7 +141,9 @@ class ClientAddComponent extends Component {
               <Select options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
             </Form.Group>
             <Form.Group controlId="exampleForm.ControlSelect1">
-              <Form.Label>Date </Form.Label>
+              <div>
+                <Form.Label>Date </Form.Label>
+              </div>
               <DatePicker
                 onChange={e => { this.handleDateSelectChange(e) }}
                 selected={this.state.date}

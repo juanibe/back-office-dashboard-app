@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import axios from 'axios'
 import { getJwt } from '../../helpers/jwt'
-import { BrowserRouter, Route, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import Select from 'react-select'
-
-
 
 class ProductAddComponent extends Component {
   constructor(props) {
@@ -62,7 +60,7 @@ class ProductAddComponent extends Component {
     axios.post('http://localhost:3001/api/v1/products', { data }, {
       headers: headers,
     }).then(response => {
-      this.props.history.push(`/products/${response.data._id}/show`)
+      this.props.history.push(`/products`)
     })
   }
 
@@ -87,7 +85,7 @@ class ProductAddComponent extends Component {
 
   loadOptions = () => {
     return this.state.categories.map(category => {
-      return { value: category.name, label: category.name }
+      return { value: category._id, label: category.name }
     })
   }
 
@@ -149,18 +147,6 @@ class ProductAddComponent extends Component {
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Categories</Form.Label>
             <Select options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
-            {/* <Form.Control as="select"
-              size="sm"
-              type="text"
-              placeholder="Category type"
-              name="category"
-              value={this.state.category}
-              onChange={e => { this.handleChange(e) }}
-            >
-              {this.state.categories.map((response, index) => {
-                return <option key={index} value={response.name}>{response.name}</option>
-              })}
-            </Form.Control> */}
           </Form.Group>
           <Form.Group controlId="formGroupAvailable">
             <Form.Check
