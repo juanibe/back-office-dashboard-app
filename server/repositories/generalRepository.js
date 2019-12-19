@@ -17,6 +17,7 @@ exports.applyFilters = function (modelName, filtered, sorted, pageSize, page) {
       .skip(recordsPerPage * (pageNo))
       .limit(recordsPerPage)
       .populate('client')
+      .populate('event')
       .populate({ path: 'product', populate: { path: 'category', select: 'name' } })
       .populate('category')
     query.exec()
@@ -67,7 +68,14 @@ transformFiltersToObject = function (queryString) {
     filters.map(filter => {
       let id = filter.id
       let value = filter.value
-      if (filter['id'] === 'name' || filter['id'] === 'comment' || filter['id'] === 'place') {
+      if (
+        filter['id'] === 'name' ||
+        filter['id'] === 'comment' ||
+        filter['id'] === 'place' ||
+        filter['id'] === 'last_name' ||
+        filter['id'] === 'first_name' ||
+        filter['id'] === 'email'
+      ) {
         filtered[id] = { '$regex': value, '$options': 'i' }
       } else {
         filtered[id] = value
