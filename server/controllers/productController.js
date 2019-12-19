@@ -16,7 +16,6 @@ exports.index = function (req, res) {
 }
 
 exports.create = function (req, res) {
-
   const name = req.body.data.name;
   const description = req.body.data.description
   const comment = req.body.data.comment
@@ -25,7 +24,7 @@ exports.create = function (req, res) {
   const state = req.body.data.state;
   const available = req.body.data.available
 
-  Category.find({ name: { $in: category } }).then(category => {
+  Category.find({ _id: { $in: category } }).then(category => {
 
     const product = new Product({
       name,
