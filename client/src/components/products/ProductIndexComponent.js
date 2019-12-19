@@ -81,7 +81,7 @@ class ProductIndexComponent extends Component {
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} modelName={"Products"} />
+        <CustomReactTable columns={this.state.columns} modelName={"Products"} user={this.props.user} />
       </div >
     )
   }

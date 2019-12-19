@@ -1,6 +1,8 @@
 
 import React, { Component } from "react";
 import { Route } from 'react-router-dom'
+import axios from "axios";
+import { getJwt } from '../helpers/jwt'
 
 import Home from '../components/Home'
 import AuthenticatedComponent from '../components/AuthenticatedComponent'
@@ -23,35 +25,80 @@ import ClientEditComponent from './clients/ClientEditComponent'
 
 import EventIndexComponent from './events/EventIndexComponent'
 import EventAddComponent from './events/EventAddComponent'
+import EventEditComponent from './events/EventEditComponent'
+import EventShowComponent from './events/EventShowComponent'
+
+import AdminIndexComponent from './admins/AdminIndexComponent'
 
 
 class Wrapper extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      user: null
     }
   }
 
+  componentDidMount() {
+    const jwt = getJwt()
+    const headers = {
+      'Authorization': `Bearer ${jwt}`,
+    }
+    axios.get('http://localhost:3001/api/v1/get-user', {
+      headers: headers,
+    }).then(response => {
+      this.setState({ user: response.data.user })
+    })
+
+  }
+
+  loadRoutes = () => {
+
+    const protectedRoutes = ['c', 'd', 'g', 'i', 'k', 'm', 'o', 'q', 'r']
+
+    let routes = [
+      { id: 'a', path: '/', component: Home },
+      { id: 'b', path: '/products', component: ProductIndexComponent },
+      { id: 'c', path: '/products/add', component: ProductAddComponent },
+      { id: 'd', path: '/products/:id/edit', component: ProductEditComponent },
+      { id: 'e', path: '/products/:id/show', component: ProductShowComponent },
+      { id: 'f', path: '/categories/', component: CategoryIndexComponent },
+      { id: 'g', path: '/categories/:id/edit', component: CategoryEditComponent },
+      { id: 'h', path: '/categories/:id/show', component: CategoryShowComponent },
+      { id: 'i', path: '/categories/add', component: CategoryAddComponent },
+      { id: 'j', path: '/clients', component: ClientIndexComponent },
+      { id: 'k', path: '/clients/:id/edit', component: ClientEditComponent },
+      { id: 'l', path: '/clients/:id/show', component: ClientShowComponent },
+      { id: 'm', path: '/clients/add', component: ClientAddComponent },
+      { id: 'n', path: '/events', component: EventIndexComponent },
+      { id: 'o', path: '/events/:id/edit', component: EventEditComponent },
+      { id: 'p', path: '/events/:id/show', component: EventShowComponent },
+      { id: 'q', path: '/events/add', component: EventAddComponent },
+      { id: 'r', path: '/admins', component: AdminIndexComponent }
+    ]
+
+    return routes.map((route) => {
+      if (this.state.user.role !== 'admin') {
+        if (protectedRoutes.includes(route.id)) {
+          return <Route key={route.id} exact path={route.path} component={Home} />
+        }
+      }
+      return <Route key={route.id} exact path={route.path} component={() => { return <route.component user={this.state.user} /> }} />
+    })
+
+  }
+
   render() {
+    if (!this.state.user) {
+      return (
+        <div>Loading...</div>
+      )
+    }
     return (
       <div>
         <AuthenticatedComponent>
           <SideBar>
-            <Route exact path={'/'} component={Home} />
-            <Route exact path={'/products'} component={ProductIndexComponent} />
-            <Route exact path={'/products/:id/show'} component={ProductShowComponent} />
-            <Route exact path={'/products/add'} component={ProductAddComponent} />
-            <Route exact path={'/products/:id/edit'} component={ProductEditComponent} />
-            <Route exact path={'/categories'} component={CategoryIndexComponent} />
-            <Route exact path={'/categories/:id/show'} component={CategoryShowComponent} />
-            <Route exact path={'/categories/add'} component={CategoryAddComponent} />
-            <Route exact path={'/categories/:id/edit'} component={CategoryEditComponent} />
-            <Route exact path={'/clients'} component={ClientIndexComponent} />
-            <Route exact path={'/clients/:id/show'} component={ClientShowComponent} />
-            <Route exact path={'/clients/add'} component={ClientAddComponent} />
-            <Route exact path={'/clients/:id/edit'} component={ClientEditComponent} />
-            <Route exact path={'/events'} component={EventIndexComponent} />
-            <Route exact path={'/events/add'} component={EventAddComponent} />
+            {this.loadRoutes()}
           </SideBar>
         </AuthenticatedComponent>
       </div >

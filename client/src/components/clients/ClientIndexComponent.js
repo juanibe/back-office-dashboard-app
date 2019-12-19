@@ -11,14 +11,17 @@ class ClientIndexComponent extends Component {
         {
           Header: "First name",
           accessor: "first_name",
+          filterable: true
         },
         {
           Header: "Last name",
-          accessor: "last_name"
+          accessor: "last_name",
+          filterable: true
         },
         {
           Header: "Email",
-          accessor: "email"
+          accessor: "email",
+          filterable: true
         },
         {
           Header: "Address",
@@ -38,7 +41,7 @@ class ClientIndexComponent extends Component {
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} modelName={"Clients"} />
+        <CustomReactTable columns={this.state.columns} modelName={"Clients"} user={this.props.user} />
       </div >
     )
   }

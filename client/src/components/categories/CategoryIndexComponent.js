@@ -13,6 +13,7 @@ class CategoryIndexComponent extends Component {
         {
           Header: "Name",
           accessor: "name",
+          filterable: true
         },
         {
           Header: "Description",
@@ -32,7 +33,7 @@ class CategoryIndexComponent extends Component {
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} modelName={'Category'} />
+        <CustomReactTable columns={this.state.columns} modelName={'Category'} user={this.props.user} />
       </div >
     )
   }
