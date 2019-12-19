@@ -38,15 +38,26 @@ exports.create = function (req, res) {
             price,
             comment
           });
-          event.save().then(response => {
-            res.send(response)
-          }).catch(err => {
-            res.status(400).send(err)
-          })
+          event.save()
+            .then(response => {
+              Product.update(
+                { _id: { $in: product } },
+                { event: event },
+                { multi: true },
+                function (err, res) {
+                  if (err) {
+                    console.log(err)
+                  } else {
+                    console.log(res)
+                  }
+                })
+              res.send(response)
+            })
         })
-
+        .catch(err => {
+          res.status(400).send(err)
+        })
     })
-
 }
 
 exports.show = function (req, res) {

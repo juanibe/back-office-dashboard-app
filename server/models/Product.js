@@ -42,6 +42,13 @@ const ProductSchema = new Schema({
       ref: 'Category'
     }]
   },
+
+  event: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Event'
+    }]
+  },
 },
   {
     toObject: { virtuals: true },
@@ -50,8 +57,6 @@ const ProductSchema = new Schema({
   {
     timestamps: true
   });
-
-
 
 ProductSchema.virtual('modelName')
   .get(function () {
