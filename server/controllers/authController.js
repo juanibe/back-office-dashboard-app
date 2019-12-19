@@ -94,8 +94,10 @@ exports.login = (req, res, next) => {
 
 exports.getUser = function (req, res, next) {
   let token = req.headers.authorization
-  let decoded = jwtDecode(token)
-  console.log(decoded)
+  let decoded = {}
+  if (token) {
+    decoded = jwtDecode(token)
+  }
   User.findById(decoded.id).then(response => {
     res.json({ user: response })
   })
