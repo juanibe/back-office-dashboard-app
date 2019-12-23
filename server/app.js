@@ -1,5 +1,14 @@
+/*
+
+I am getting the user from 2 different places.
+It seems that passport is getting the first user, while the get-user is getting it from
+the user that is actually logged in.
+
+*/
+
 require('dotenv').config();
 require('./config/passport');
+require('./config/multer');
 
 const passport = require("passport");
 const bodyParser = require('body-parser');
@@ -49,7 +58,6 @@ app.use(passport.initialize());
 
 acl.config({
   baseUrl: '/api/v1/',
-  decodedObjectName: 'user',
   roleSearchPath: 'user.role'
 });
 
@@ -71,23 +79,25 @@ app.use(cors({
   origin: `${process.env.BASE_URL}:${process.env.PORT_ORIGIN}`,
 }));
 
+const upload = require('./config/multer')
 
 const index = require('./routes/web-routes/index');
 const auth = require('./routes/api-routes/auth');
+const users = require('./routes/api-routes/user')
 const products = require('./routes/api-routes/product');
 const categories = require('./routes/api-routes/category')
 const clients = require('./routes/api-routes/client')
 const events = require('./routes/api-routes/event')
-const users = require('./routes/api-routes/user')
+const images = require('./routes/api-routes/image')
+
 
 app.use('/api/v1', index);
 app.use('/api/v1', auth)
+app.use('/api/v1/users', passport.authenticate('jwt', { session: false }), acl.authorize, users)
 app.use('/api/v1/products', passport.authenticate('jwt', { session: false }), acl.authorize, products)
 app.use('/api/v1/categories', passport.authenticate('jwt', { session: false }), acl.authorize, categories)
 app.use('/api/v1/clients', passport.authenticate('jwt', { session: false }), acl.authorize, clients)
 app.use('/api/v1/events', passport.authenticate('jwt', { session: false }), acl.authorize, events)
-app.use('/api/v1/users', passport.authenticate('jwt', { session: false }), users)
-
-app.use(acl.authorize);
+app.use('/api/v1/images', passport.authenticate('jwt', { session: false }), acl.authorize, upload.any(), images)
 
 module.exports = app;
