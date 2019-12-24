@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
 const Event = require('../models/Event');
 const Client = require('../models/Client');
-const Product = require('../models/Product');
 const GeneralRepository = require('../repositories/generalRepository');
 
 
@@ -28,35 +26,23 @@ exports.create = function (req, res) {
 
   Client.findById(client)
     .then(client => {
-      Product.find({ _id: { $in: product } })
-        .then(product => {
-          const event = new Event({
-            client,
-            product,
-            date,
-            place,
-            price,
-            comment
-          });
-          event.save()
-            .then(response => {
-              Product.update(
-                { _id: { $in: product } },
-                { event: event },
-                { multi: true },
-                function (err, res) {
-                  if (err) {
-                    console.log(err)
-                  } else {
-                    console.log(res)
-                  }
-                })
-              res.send(response)
-            })
-        })
-        .catch(err => {
-          res.status(400).send(err)
-        })
+      const event = new Event({
+        client,
+        product,
+        date,
+        place,
+        price,
+        comment
+      });
+      event.save(err => {
+        if (err) {
+          res
+            .status(400)
+            .json({ message: "Saving event to database went wrong." });
+          return;
+        }
+        res.send(event);
+      })
     })
 }
 
@@ -69,7 +55,7 @@ exports.show = function (req, res) {
 
 exports.update = function (req, res) {
 
-  Event.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
+  Event.findOneAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
 
     if (err) console.log(err);
 
