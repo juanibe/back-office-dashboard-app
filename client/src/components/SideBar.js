@@ -12,9 +12,10 @@ class SideBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: null,
+      user: {},
       sidebarDocked: mql.matches,
-      sidebarOpen: false
+      sidebarOpen: false,
+      image: "https://res.cloudinary.com/dfxsoyryz/image/upload/v1576956381/arl7jnlu8a7rtblq9tbv.png"
     }
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -22,7 +23,7 @@ class SideBar extends Component {
 
   listItems = () => {
 
-    const protectedRoutes = ['Accounts', 'Admin', 'Stats']
+    const protectedRoutes = ['f', 'h', 'i']
 
     let items = [
       { id: 'a', value: 'Home', route: '/' },
@@ -30,15 +31,16 @@ class SideBar extends Component {
       { id: 'c', value: 'Categories', route: '/categories' },
       { id: 'd', value: 'Clients', route: '/clients' },
       { id: 'e', value: 'Events', route: '/events' },
-      { id: 'f', value: 'Accounts', route: '/accounts' },
-      { id: 'g', value: 'Admin', route: 'admins' },
-      { id: 'h', value: 'Stats', route: '/stats' },
-      { id: 'i', value: 'Help', route: '/help' },
-      { id: 'j', value: 'Logout', route: '/logout', logout: this.logout }
+      { id: 'f', value: 'Users', route: '/users' },
+      { id: 'g', value: 'Profile', route: '/profile' },
+      { id: 'h', value: 'Accounts', route: '/accounts' },
+      { id: 'i', value: 'Stats', route: '/stats' },
+      { id: 'j', value: 'Help', route: '/help' },
+      { id: 'k', value: 'Logout', route: '/logout', logout: this.logout }
     ]
     if (this.state.user.role !== 'admin') {
       items = items.filter((item) => {
-        return !protectedRoutes.includes(item.value)
+        return !protectedRoutes.includes(item.id)
       })
     }
     return items.map((item) => {
@@ -68,6 +70,13 @@ class SideBar extends Component {
     }).then(response => {
       this.setState({ user: response.data.user })
     })
+      .then(() => {
+        axios.get(`http://localhost:3001/api/v1/images/${this.state.user.image[0]}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+          .then(response => {
+            console.log("RESPONSE FILE IMAGE", response)
+            this.setState({ image: response.data.cloudImage })
+          })
+      })
   }
 
   logout = () => {
@@ -81,7 +90,8 @@ class SideBar extends Component {
 
 
   render() {
-    if (!this.state.user) {
+    console.log("STATE SIDEBAR", this.state)
+    if (!this.state.user && !this.state.image) {
       return (
         <div>Loading...</div>
       )
@@ -91,8 +101,8 @@ class SideBar extends Component {
         <Sidebar
           sidebar={
             <div>
-              <ul>
-                <img className="profile-pic" src={profilePic} />
+              <ul className="profile-presentation">
+                <img className="profile-pic rounded-circle" src={this.state.image} />
                 <li>{this.state.user.fullName}</li>
                 <li>{this.state.user.role}</li>
               </ul>
@@ -107,7 +117,8 @@ class SideBar extends Component {
           styles={{
             sidebar: {
               background: '#0292B7',
-              width: '10em'
+              width: '13em',
+              navigator: '10em'
             },
 
           }}
