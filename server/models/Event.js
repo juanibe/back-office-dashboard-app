@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Product = require('../models/Product');
+
 
 const EventSchema = new Schema({
 
@@ -49,7 +51,24 @@ const EventSchema = new Schema({
   },
 );
 
-// Compile model from Schema
+/**
+ * Updates Product model when updating and creating event and adding products.
+ * Find a better place to do it?
+ */
+
+EventSchema.post("save", function (doc) {
+  Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString() } }, { multi: true }, function (error, product) {
+    if (error) console.log(error)
+  })
+})
+
+EventSchema.post("findOneAndUpdate", function (doc) {
+  Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString() } }, { multi: true }, function (error, product) {
+    if (error) console.log(error)
+  })
+})
+
 const Event = mongoose.model('Event', EventSchema);
+
 
 module.exports = Event;
