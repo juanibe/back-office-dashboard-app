@@ -12,8 +12,9 @@ const opts = {
   secretOrKey: 'Secret'
 }
 
+
 passport.use(new JwtStrategy(opts, (payload, next) => {
-  User.findOne(payload.email)
+  User.findById(payload.id)
     .then(response => {
       next(null, response)
     });
