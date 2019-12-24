@@ -49,6 +49,13 @@ const ProductSchema = new Schema({
       ref: 'Event'
     }]
   },
+
+  image: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Image'
+    }]
+  },
 },
   {
     toObject: { virtuals: true },
