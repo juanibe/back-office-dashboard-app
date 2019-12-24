@@ -67,16 +67,19 @@ class CustomReactTable extends Component {
         Cell: (row) => [
           // Find a better way to add unique key
           <Link to={`${this.props.location.pathname}/${row.original._id}/show`} key={row.original._id} params={{ id: row.original._id }}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={eye} /></button></Link>,
+          <input key={row.original._id + 'c'} type='checkbox'></input>
         ]
       }
     } else {
       columnsArray = {
         Header: "",
         Cell: (row) => [
-          // Find a better way to add unique key
-          <Link to={`${this.props.location.pathname}/${row.original._id}/show`} key={row.original._id} params={{ id: row.original._id }}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={eye} /></button></Link>,
-          <Link to={`${this.props.location.pathname}/${row.original._id}/edit`} key={row.original._id + 'a'}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={writing} /></button></Link>,
-          <button key={row.original._id + 'b'} className="btn-xs btn-outline-light" onClick={() => { this.onClickDeleteButton(row.original._id) }}><img style={{ width: '1em' }} src={bin} /></button>
+          <div>
+            <Link to={`${this.props.location.pathname}/${row.original._id}/show`} key={row.original._id} params={{ id: row.original._id }}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={eye} /></button></Link>
+            <Link to={`${this.props.location.pathname}/${row.original._id}/edit`} key={row.original._id + 'a'}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={writing} /></button></Link>
+            <button key={row.original._id + 'b'} className="btn-xs btn-outline-light" onClick={() => { this.onClickDeleteButton(row.original._id) }}><img style={{ width: '1em' }} src={bin} /></button>
+            <input key={row.original._id + 'c'} type='checkbox'></input>
+          </div>
         ]
       }
     }
@@ -85,19 +88,22 @@ class CustomReactTable extends Component {
   }
 
   loadFunctionalities = () => {
+    const selectAll = <span className='functionalities-select-all-table'><button onClick={() => { this.refreshTableFilters() }} className="btn-sm btn-outline-info">Select all</button></span>
     const refreshTable = <span className='functionalities-refresh-table'><button onClick={() => { this.refreshTableFilters() }} className="btn-sm btn-outline-dark">Refresh table</button></span>
     const addButton = <span className='functionalities-add-item-table'> <Link to={`${this.props.location.pathname}/add`}><button className="btn-sm btn-outline-success">Add new {this.props.modelName}</button></Link></span>
     if (this.props.user.role !== 'admin') {
       return (
         <div className='functionalities-react-table'>
           {refreshTable}
+          {selectAll}
         </div>
       )
     } else {
       return (
         <div className='functionalities-react-table'>
-          {refreshTable}
           {addButton}
+          {refreshTable}
+          {selectAll}
         </div>
       )
     }
