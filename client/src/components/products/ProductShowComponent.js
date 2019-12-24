@@ -3,9 +3,6 @@ import { withRouter } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import axios from "axios";
 import { getJwt } from '../../helpers/jwt'
-import back from '../../img/return.png'
-import bin from '../../img/bin.png'
-import writing from '../../img/writing.png'
 
 
 class ProductShowComponent extends Component {
@@ -13,9 +10,19 @@ class ProductShowComponent extends Component {
     super(props)
     this.state = {
       product: null,
-      product_id: this.props.match.params.id
+      product_id: this.props.match.params.id,
+      image_id: "",
+      image: {},
+      showId: false,
+      hideId: false
     }
   }
+
+  toggleShowId = () => {
+    this.setState({ showId: !this.state.showId, hideId: !this.state.hideId })
+
+  }
+
 
   deleteConfirmation = () => {
     const jwt = getJwt()
@@ -30,60 +37,89 @@ class ProductShowComponent extends Component {
     const jwt = getJwt()
     axios.get(`http://localhost:3001/api/v1/products/${this.state.product_id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
-        console.log('product', response)
-        this.setState({ product: response.data })
+        this.setState({ product: response.data, image_id: response.data.image[0] })
+      }).then(() => {
+        axios.get(`http://localhost:3001/api/v1/images/${this.state.image_id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+          .then(response => {
+            this.setState({ image: response.data })
+          })
       })
   }
 
 
   render() {
-    if (!this.state.product) {
+    if (!this.state.product || !this.state.image) {
       return (
         <div>Loading...</div>
       )
     }
     return (
-      <div className="main-content">
-        {this.state.alert && (
-          <SweetAlert
-            warning
-            showCancel
-            confirmBtnText="Yes, delete it!"
-            confirmBtnBsStyle="danger"
-            cancelBtnBsStyle="default"
-            title="Are you sure?"
-            onConfirm={() => { this.deleteConfirmation() }}
-            onCancel={() => { this.setState({ alert: false }) }}
-          >
-            You will delete this product premanently...
+      < div className="main-content" >
+        <div>
+          {this.state.alert && (
+            <SweetAlert
+              warning
+              showCancel
+              confirmBtnText="Yes, delete it!"
+              confirmBtnBsStyle="danger"
+              cancelBtnBsStyle="default"
+              title="Are you sure?"
+              onConfirm={() => { this.deleteConfirmation() }}
+              onCancel={() => { this.setState({ alert: false }) }}
+            >
+              You will delete this product premanently...
           </SweetAlert>
-        )}
-        <div className="card text-center">
-          <div className="card-header">
-            Featured
-  </div>
-          <div className="card-body">
-            <h5 className="card-title">Name: <b>{this.state.product.name}</b></h5>
-            <div className="card-text">
-              <ul>
-                <li>Categories:
-                  <ul>
-                    {this.state.product.category.map(category => {
-                      return <li><b>{category.name}</b></li>
-                    })}
-                  </ul>
-                </li>
-                <li>Price: <b>{this.state.product.price}</b></li>
-                <li>State: <b>{this.state.product.state}</b></li>
-              </ul>
+          )}
+        </div>
+        <div className="btn-group-product-show">
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={() => { this.props.history.push(`edit`) }}>Edit</button>
+          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
+          <span><button className="btn-product-show btn-xs btn-outline-danger" onClick={() => this.setState({ alert: true })}>Delete</button></span>
+        </div >
+        <div className="cointainer">
+          <div className="product-show-description-image-container row">
+            <div className="col-6">
+              {this.state.showId ? <div style={{ fontSize: "0.7em", display: "inline-block", color: "green", padding: "5px", margin: "0 0 10px 0" }}>Unique Id: <b>{this.state.product._id}</b></div> : <div></div>}
+              <h3>{this.state.product.name}</h3>
+              <h5>Description</h5>
+              <p>{this.state.product.description}</p>
+              <h5>Comment</h5>
+              <p>{this.state.product.comment}</p>
+              <h5>This product belongs to these categories:</h5>
+              {this.state.product.category.map(category => {
+                return (
+                  <p>{category.name}</p>
+                )
+              })}
+              <h5>Available</h5>
+              <p>{this.state.product.available ? <p style={{ color: "green" }}>Yes</p> : <p style={{ color: "red" }}>No</p>}</p>
             </div>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={back} /></button>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={writing} /></button>
-            <span><button className="btn btn-light" onClick={() => this.setState({ alert: true })}><img src={bin} /></button></span>
+            <div className="col-6">
+              <img className="image-show-product" src={this.state.image.cloudImage}></img>
+            </div>
           </div>
-          <div className="card-footer text-muted">
-            2 days ago
-  </div>
+          <div className="divisory-line">
+          </div>
+          <div className="row">
+            <div className="col-3">
+              <h5>Upcoming events</h5>
+            </div>
+            <div className="col-9">
+              {this.state.product.event.map(event => {
+                return (
+                  <div className="upcoming-events-show-product">
+                    <p>Client: {event.client[0].full_name}</p>
+                    <p>Place: {event.place}</p>
+                    <p>Date: {event.date}</p>
+                    <p>{event.comment}</p>
+                    <div className="divisory-line">
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </div >
     )
