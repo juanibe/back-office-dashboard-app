@@ -49,7 +49,7 @@ class CategoryShowComponent extends Component {
             <button className="btn btn-light" onClick={this.props.history.goBack}><img src={writing} /></button>
             <button className="btn btn-light" onClick={this.props.history.goBack}><img src={bin} /></button>
           </div>
-          <div class="card-footer text-muted">
+          <div className="card-footer text-muted">
             2 days ago
   </div>
         </div>

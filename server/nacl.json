@@ -13,18 +13,56 @@
     "group": "employee",
     "permissions": [
       {
-        "resource": [
-          "products/*"
-        ],
+        "resource": "products/*",
         "methods": [
           "GET"
         ],
         "action": "allow"
       },
       {
-        "resource": [
-          "categories/*"
+        "resource": "categories/count-documents",
+        "methods": [
+          "GET"
         ],
+        "action": "allow"
+      },
+      {
+        "resource": "events/count-documents",
+        "methods": [
+          "GET"
+        ],
+        "action": "allow"
+      },
+      {
+        "resource": "clients/count-documents",
+        "methods": [
+          "GET"
+        ],
+        "action": "allow"
+      },
+      {
+        "resource": "categories/*",
+        "methods": [
+          "GET"
+        ],
+        "action": "allow"
+      },
+      {
+        "resource": "events",
+        "methods": [
+          "GET"
+        ],
+        "action": "allow"
+      },
+      {
+        "resource": "clients",
+        "methods": [
+          "GET"
+        ],
+        "action": "allow"
+      },
+      {
+        "resource": "images/*",
         "methods": [
           "GET"
         ],

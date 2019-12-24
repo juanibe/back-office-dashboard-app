@@ -24,11 +24,15 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  // group: [{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Group'
-  // }],
-  role: String,
+
+  role: { type: String, required: true, default: 'user' },
+
+  image: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Image'
+    }]
+  },
 },
 
   {

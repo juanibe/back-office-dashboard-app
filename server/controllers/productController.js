@@ -3,7 +3,6 @@ const Category = require('../models/Category');
 const GeneralRepository = require('../repositories/generalRepository');
 
 exports.index = function (req, res) {
-
   const filtered = req.query.filtered
   const sorted = req.query.sorted
   const pageSize = req.query.pageSize
@@ -25,7 +24,6 @@ exports.create = function (req, res) {
   const available = req.body.data.available
 
   Category.find({ _id: { $in: category } }).then(category => {
-
     const product = new Product({
       name,
       price,
@@ -33,7 +31,7 @@ exports.create = function (req, res) {
       comment,
       description,
       state,
-      available
+      available,
     });
 
     product.save(err => {
@@ -50,10 +48,12 @@ exports.create = function (req, res) {
 
 exports.show = function (req, res) {
 
-  Product.findById(req.params.id).populate('category').then((product) => {
-    //res.send(product.category[0].name);
-    res.send(product)
-  });
+  Product.findById(req.params.id)
+    .populate('category')
+    .populate({ path: 'event', populate: { path: 'client' } })
+    .then((product) => {
+      res.send(product)
+    });
 }
 
 exports.update = function (req, res) {

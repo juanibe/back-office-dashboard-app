@@ -46,7 +46,7 @@ exports.register = function (req, res) {
         role
 
       })
-      user.save(err => {
+      user.save((err, result) => {
         if (err) {
           res
             .status(400)
@@ -54,8 +54,7 @@ exports.register = function (req, res) {
           return;
         }
         res
-          .status(200)
-          .json({ 'result': 'User successfully created' })
+          .send(result)
       })
     });
   })
