@@ -15,7 +15,7 @@ class ProductAddComponent extends Component {
       comment: "",
       price: 0,
       category: "",
-      available: false
+      available: false,
     }
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
@@ -37,6 +37,11 @@ class ProductAddComponent extends Component {
 
     event.preventDefault();
 
+    const headers = {
+      'Authorization': `Bearer ${jwt}`,
+    }
+
+
     const name = this.state.name
     const description = this.state.description
     const comment = this.state.comment
@@ -53,14 +58,13 @@ class ProductAddComponent extends Component {
       available,
     }
 
-    const headers = {
-      'Authorization': `Bearer ${jwt}`,
-    }
-
     axios.post('http://localhost:3001/api/v1/products', { data }, {
       headers: headers,
     }).then(response => {
-      this.props.history.push(`/products`)
+      this.props.history.push({
+        pathname: '/confirm',
+        state: { id: response.data.id, loc: this.props.location.pathname }
+      })
     })
   }
 
@@ -90,7 +94,6 @@ class ProductAddComponent extends Component {
   }
 
   render() {
-    console.log(this.state.category)
     if (!this.state.categories) {
       return (
         <div>Loading...</div>
@@ -99,7 +102,7 @@ class ProductAddComponent extends Component {
     return (
       <div className='add-product-form-main'>
         <h4 className="form-title">Add new product</h4>
-        <Form onSubmit={this.handleFormSubmit}>
+        <Form onSubmit={this.handleFormSubmit} encType="multipart/form-data">
           <Form.Group controlId="formGroupName">
             <Form.Label>Name</Form.Label>
             <Form.Control
