@@ -1,11 +1,3 @@
-/*
-
-I am getting the user from 2 different places.
-It seems that passport is getting the first user, while the get-user is getting it from
-the user that is actually logged in.
-
-*/
-
 require('dotenv').config();
 require('./config/passport');
 require('./config/multer');
