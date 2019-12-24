@@ -7,6 +7,8 @@ import { getJwt } from '../helpers/jwt'
 import Home from '../components/Home'
 import AuthenticatedComponent from '../components/AuthenticatedComponent'
 import SideBar from "../components/SideBar";
+import ConfirmationPageComponent from "../components/ConfirmationPageComponent"
+import ProfileComponent from "../components/ProfileComponent"
 
 import ProductIndexComponent from './products/ProductIndexComponent'
 import ProductShowComponent from "./products/ProductShowComponent";
@@ -28,7 +30,10 @@ import EventAddComponent from './events/EventAddComponent'
 import EventEditComponent from './events/EventEditComponent'
 import EventShowComponent from './events/EventShowComponent'
 
-import AdminIndexComponent from './admins/AdminIndexComponent'
+import UserIndexComponent from './users/UserIndexComponent'
+import UserShowComponent from './users/UserShowComponent'
+import UserAddComponent from './users/UserAddComponent'
+import UserEditComponent from './users/UserEditComponent'
 
 
 class Wrapper extends Component {
@@ -54,7 +59,7 @@ class Wrapper extends Component {
 
   loadRoutes = () => {
 
-    const protectedRoutes = ['c', 'd', 'g', 'i', 'k', 'm', 'o', 'q', 'r']
+    const protectedRoutes = ['c', 'd', 'g', 'i', 'k', 'm', 'o', 'q', 'r', 's', 't', 'u']
 
     let routes = [
       { id: 'a', path: '/', component: Home },
@@ -74,7 +79,12 @@ class Wrapper extends Component {
       { id: 'o', path: '/events/:id/edit', component: EventEditComponent },
       { id: 'p', path: '/events/:id/show', component: EventShowComponent },
       { id: 'q', path: '/events/add', component: EventAddComponent },
-      { id: 'r', path: '/admins', component: AdminIndexComponent }
+      { id: 'r', path: '/users', component: UserIndexComponent },
+      { id: 's', path: '/users/:id/show', component: UserShowComponent },
+      { id: 't', path: '/users/:id/edit', component: UserEditComponent },
+      { id: 'u', path: '/users/add', component: UserAddComponent },
+      { id: 'v', path: '/confirm', component: ConfirmationPageComponent },
+      { id: 'w', path: '/profile', component: ProfileComponent }
     ]
 
     return routes.map((route) => {
