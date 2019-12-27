@@ -9,19 +9,34 @@ class DeleteComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      path: ""
     }
+  }
+
+  componentDidMount() {
+    const pathIncluded = ["products", "categories", "events", "clients", "users"]
+    pathIncluded.map((pathName, index) => {
+      if (this.props.location.pathname.includes(pathName)) {
+        this.setState({ path: pathIncluded[index] })
+      }
+    })
   }
 
   deleteConfirmation = () => {
     const jwt = getJwt()
-    axios.delete(`http://localhost:3001/api/v1${this.props.location.pathname}/${this.props.item}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+    axios.delete(`http://localhost:3001/api/v1/${this.state.path}/${this.props.item}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(() => {
-        this.props.onCancelDeleteClick()
-        this.props.reloadData(this.state)
+        this.props.onConfirmDeleteClick()
+        if (this.props.reloadData) {
+          this.props.reloadData(this.state)
+        }
       })
   }
 
   render() {
+    if (!this.props.location.pathname) {
+      return (<div>Loading...</div>)
+    }
     return (
       <div className='main-content'>
         <div>
