@@ -44,9 +44,11 @@ exports.create = function (req, res) {
 
 exports.show = function (req, res) {
 
-  Client.findById(req.params.id).then((client) => {
-    res.send(client)
-  });
+  Client.findById(req.params.id)
+    .populate('event')
+    .then((client) => {
+      res.send(client)
+    });
 }
 
 exports.update = function (req, res) {
@@ -63,7 +65,7 @@ exports.delete = function (req, res) {
 
   const id = req.params.id;
 
-  Client.findByIdAndRemove(id, (err, client) => {
+  Client.deleteOne({ _id: id }, (err, client) => {
 
     if (err) return res.status(500).send(err);
 

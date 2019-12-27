@@ -48,9 +48,12 @@ exports.create = function (req, res) {
 
 exports.show = function (req, res) {
 
-  Event.findById(req.params.id).then((event) => {
-    res.send(event)
-  });
+  Event.findById(req.params.id)
+    .populate('client')
+    .populate('product')
+    .then((event) => {
+      res.send(event)
+    });
 }
 
 exports.update = function (req, res) {
