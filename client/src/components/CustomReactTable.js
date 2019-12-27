@@ -91,6 +91,7 @@ class CustomReactTable extends Component {
     const selectAll = <span className='functionalities-select-all-table'><button onClick={() => { this.refreshTableFilters() }} className="btn-sm btn-outline-info">Select all</button></span>
     const refreshTable = <span className='functionalities-refresh-table'><button onClick={() => { this.refreshTableFilters() }} className="btn-sm btn-outline-dark">Refresh table</button></span>
     const addButton = <span className='functionalities-add-item-table'> <Link to={`${this.props.location.pathname}/add`}><button className="btn-sm btn-outline-success">Add new {this.props.modelName}</button></Link></span>
+
     if (this.props.user.role !== 'admin') {
       return (
         <div className='functionalities-react-table'>
@@ -110,12 +111,21 @@ class CustomReactTable extends Component {
 
   }
 
+  loadModes = () => {
+    return <span className='functionalities-add-item-table'> <Link to={`${this.props.location.pathname}/add`}><button style={{ fontSize: "0.7em" }} className=""> Show past events</button></Link></span>
+  }
+
   onClickDeleteButton = (id) => {
     this.setState({ showDelete: true, item: id })
   }
 
   onCancelDeleteClick = () => {
     this.setState({ showDelete: false })
+  }
+
+  onConfirmDeleteClick = () => {
+    this.setState({ showDelete: false })
+    this.props.history.push(this.props.location.pathname)
   }
 
   componentDidMount() {
@@ -140,10 +150,12 @@ class CustomReactTable extends Component {
           <DeleteComponent
             reloadData={this.reloadData}
             onCancelDeleteClick={this.onCancelDeleteClick}
+            onConfirmDeleteClick={this.onConfirmDeleteClick}
             item={this.state.item} />
         )}
         <h3>{`${this.props.modelName} (${this.state.totalItems})`}</h3>
         {this.loadFunctionalities()}
+        {this.loadModes()}
         <ReactTable
           data={this.state.data}
           columns={this.props.columns}
