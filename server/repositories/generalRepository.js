@@ -6,24 +6,28 @@ exports.applyFilters = function (modelName, filtered, sorted, pageSize, page) {
   let Model = mongoose.model(modelName)
   let sort = {}
   const filters = transformFiltersToObject(filtered)
+  const date = new Date()
   if (sorted) sort = transformSortToObject(sorted)
   if (pageSize) var recordsPerPage = parseInt(pageSize)
   if (page) var pageNo = parseInt(page)
+  if (modelName === 'Event') {
+    filters.date = { $gte: new Date() }
+  }
 
   return new Promise((resolve, reject) => {
-    const query = Model
+    let query = Model
       .find(filters)
       .sort(sort)
       .skip(recordsPerPage * (pageNo))
       .limit(recordsPerPage)
-      .populate('event')
       .populate('client')
       .populate({ path: 'product', populate: { path: 'category', select: 'name' } })
       .populate('category')
+      .populate({ path: 'event' })
     query.exec()
       .then(response => {
-        products = response
-        resolve(products)
+        items = response
+        resolve(items)
       }).catch(error => {
         console.log(error)
       })
