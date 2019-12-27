@@ -1,10 +1,8 @@
 import React, { Component } from "react";
+import DeleteComponent from "../../components/DeleteComponent"
 import { withRouter } from 'react-router-dom';
-import Axios from "axios";
+import axios from "axios";
 import { getJwt } from '../../helpers/jwt'
-import back from '../../img/return.png'
-import bin from '../../img/bin.png'
-import writing from '../../img/writing.png'
 
 
 class CategoryShowComponent extends Component {
@@ -12,17 +10,38 @@ class CategoryShowComponent extends Component {
     super(props)
     this.state = {
       category: null,
-      category_id: this.props.match.params.id
+      category_id: this.props.match.params.id,
+      showDelete: false,
+      showId: false,
+      hideId: false
     }
   }
 
   componentDidMount() {
     const jwt = getJwt()
-    Axios.get(`http://localhost:3001/api/v1/categories/${this.state.category_id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
+    axios.get(`http://localhost:3001/api/v1/categories/${this.state.category_id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         console.log(response.data)
         this.setState({ category: response.data })
       })
+  }
+
+  toggleShowId = () => {
+    this.setState({ showId: !this.state.showId, hideId: !this.state.hideId })
+
+  }
+
+  onClickDeleteButton = () => {
+    this.setState({ showDelete: true })
+  }
+
+  onCancelDeleteClick = () => {
+    this.setState({ showDelete: false })
+  }
+
+  onConfirmDeleteClick = () => {
+    this.setState({ showDelete: false })
+    this.props.history.push('/categories')
   }
 
 
@@ -34,25 +53,24 @@ class CategoryShowComponent extends Component {
     }
     return (
       <div className="main-content">
-        <div className="card text-center">
-          <div className="card-header">
-            Featured
-  </div>
-          <div className="card-body">
-            <h5 className="card-title">Name: <b>{this.state.category.name}</b></h5>
-            <div className="card-text">
-              <ul>
-                <li>Description: <b>{this.state.category.description}</b></li>
-              </ul>
-            </div>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={back} /></button>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={writing} /></button>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={bin} /></button>
-          </div>
-          <div className="card-footer text-muted">
-            2 days ago
-  </div>
-        </div>
+        {
+          this.state.showDelete && (
+            <DeleteComponent
+              onCancelDeleteClick={this.onCancelDeleteClick}
+              onConfirmDeleteClick={this.onConfirmDeleteClick}
+              item={this.state.category_id}
+            />
+          )
+        }
+        <div className="btn-group-product-show">
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={() => { this.props.history.push(`edit`) }}>Edit</button>
+          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
+          <button className="btn-product-show btn-xs btn-outline-danger" onClick={() => { this.onClickDeleteButton() }}>Delete</button>
+        </div >
+        {this.state.showId ? <div style={{ fontSize: "0.7em", display: "inline-block", color: "green", padding: "5px", margin: "0 0 10px 0" }}>Unique Id: <b>{this.state.category_id}</b></div> : <div></div>}
+        <h3>Name: <b>{this.state.category.name}</b></h3>
+        <h5>Description: {this.state.category.description}</h5>
       </div >
     )
   }

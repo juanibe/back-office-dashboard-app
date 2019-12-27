@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { withRouter } from 'react-router-dom';
-import SweetAlert from 'react-bootstrap-sweetalert';
+import DeleteComponent from "../../components/DeleteComponent"
 import axios from "axios";
 import { getJwt } from '../../helpers/jwt'
-import back from '../../img/return.png'
-import bin from '../../img/bin.png'
-import writing from '../../img/writing.png'
+
+const Moment = require('moment');
+
 
 
 class EventShowComponent extends Component {
@@ -13,17 +13,11 @@ class EventShowComponent extends Component {
     super(props)
     this.state = {
       event: null,
-      event_id: this.props.match.params.id
+      event_id: this.props.match.params.id,
+      showDelete: false,
+      showId: false,
+      hideId: false
     }
-  }
-
-  deleteConfirmation = () => {
-    const jwt = getJwt()
-    axios.delete(`http://localhost:3001/api/v1/events/${this.state.event_id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
-      .then(response => {
-        this.setState({ alert: false })
-        this.props.history.push('/events')
-      })
   }
 
   componentDidMount() {
@@ -34,8 +28,27 @@ class EventShowComponent extends Component {
       })
   }
 
+  toggleShowId = () => {
+    this.setState({ showId: !this.state.showId, hideId: !this.state.hideId })
+
+  }
+
+  onClickDeleteButton = () => {
+    this.setState({ showDelete: true })
+  }
+
+  onCancelDeleteClick = () => {
+    this.setState({ showDelete: false })
+  }
+
+  onConfirmDeleteClick = () => {
+    this.setState({ showDelete: false })
+    this.props.history.push('/events')
+  }
+
 
   render() {
+    console.log(this.state.event)
     if (!this.state.event) {
       return (
         <div>Loading...</div>
@@ -43,42 +56,34 @@ class EventShowComponent extends Component {
     }
     return (
       <div className="main-content">
-        {this.state.alert && (
-          <SweetAlert
-            warning
-            showCancel
-            confirmBtnText="Yes, delete it!"
-            confirmBtnBsStyle="danger"
-            cancelBtnBsStyle="default"
-            title="Are you sure?"
-            onConfirm={() => { this.deleteConfirmation() }}
-            onCancel={() => { this.setState({ alert: false }) }}
-          >
-            You will delete this product premanently...
-          </SweetAlert>
-        )}
-        <div className="card text-center">
-          <div className="card-header">
-            Featured
-  </div>
-          <div className="card-body">
-            <h5 className="card-title">Client: <b>{this.state.event.client}</b></h5>
-            <div className="card-text">
-              <ul>
-                <li>Products: <b>{this.state.event.product}</b></li>
-                <li>Place: <b>{this.state.event.place}</b></li>
-                <li>Date: <b>{this.state.event.date}</b></li>
-                <li>Price: <b>{this.state.event.price}</b></li>
-                <li>Comment: <b>{this.state.event.comment}</b></li>
-              </ul>
-            </div>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={back} /></button>
-            <button className="btn btn-light" onClick={this.props.history.goBack}><img src={writing} /></button>
-            <span><button className="btn btn-light" onClick={() => this.setState({ alert: true })}><img src={bin} /></button></span>
+        {
+          this.state.showDelete && (
+            <DeleteComponent
+              onCancelDeleteClick={this.onCancelDeleteClick}
+              onConfirmDeleteClick={this.onConfirmDeleteClick}
+              item={this.state.event_id}
+            />
+          )
+        }
+        <div>
+          <div className="btn-group-product-show">
+            <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
+            <button className="btn-product-show btn-xs btn-outline-dark" onClick={() => { this.props.history.push(`edit`) }}>Edit</button>
+            <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
+            <button className="btn-product-show btn-xs btn-outline-danger" onClick={() => { this.onClickDeleteButton() }}>Delete</button>
+          </div >
+          <div>
+            {this.state.showId ? <div style={{ fontSize: "0.7em", display: "inline-block", color: "green", padding: "5px", margin: "0 0 10px 0" }}>Unique Id: <b>{this.state.event_id}</b></div> : <div></div>}
+            <h3>{this.state.event.client[0].full_name}</h3>
+            <p><ins>Event date</ins>: <b>{Moment(this.state.event.date).format('DD-MM-YYYY')}</b></p>
+            <p><ins>Event address</ins>: {this.state.event.place}</p>
+            <p><ins>Event price</ins>: {this.state.event.price}</p>
+            <p><ins>Event comment</ins>: {this.state.event.comment}</p>
+            <h5>Products:</h5>
+            {this.state.event.product.map(product => {
+              return <p key={product._id}>{product.name}</p>
+            })}
           </div>
-          <div className="card-footer text-muted">
-            2 days ago
-  </div>
         </div>
       </div >
     )
