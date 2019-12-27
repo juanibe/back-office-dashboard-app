@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const ClientSchema = new Schema({
 
   first_name: {
@@ -46,6 +47,13 @@ const ClientSchema = new Schema({
     maxlength: 12000,
     minlength: 1
   },
+
+  event: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Event'
+    }]
+  },
 },
   {
     toObject: { virtuals: true },
@@ -56,6 +64,17 @@ const ClientSchema = new Schema({
   },
 );
 
+ClientSchema.pre("deleteOne", function (next) {
+  const Event = require('../models/Event');
+  let clientId = this.getQuery()['_id'];
+  Event.deleteMany({ client: clientId }, function (error, product) {
+    if (error) {
+      console.log(error)
+    } else {
+      next()
+    }
+  })
+})
 
 ClientSchema.virtual('full_name')
   .get(function () {
