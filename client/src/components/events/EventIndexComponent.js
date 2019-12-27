@@ -3,8 +3,9 @@ import CustomReactTable from "../CustomReactTable";
 import { withRouter } from 'react-router-dom';
 import { getJwt } from '../../helpers/jwt'
 import axios from "axios";
-import check from '../../img/check.png'
-import uncheck from '../../img/uncheck.png'
+import "react-datepicker/dist/react-datepicker.css";
+
+const Moment = require('moment');
 
 class EventIndexComponent extends Component {
   constructor(props) {
@@ -21,11 +22,10 @@ class EventIndexComponent extends Component {
           },
 
           filterable: true,
-          id: 'client',
-           Filter: ({ filter, onChange }) =>
-             <select style={{ width: "100%", height: "100%" }} onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined} >
-          //     <option value={""}>Show All</option>
-               {this.state.clients.map((client) => {
+          Filter: ({ filter, onChange }) =>
+            <select style={{ width: "100%", height: "100%" }} onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined} >
+              <option value={""}>Show All</option>
+              {this.state.clients.map((client) => {
                 return (
                   <option key={client._id} value={client._id}>{client.full_name}</option>
                 )
@@ -38,9 +38,10 @@ class EventIndexComponent extends Component {
           filterable: true,
         },
         {
+          id: 'date',
           Header: 'Date',
-          accessor: 'date',
-          filterable: true,
+          accessor: d => { return Moment(d.date).format('DD-MM-YYYY') },
+          filterable: false,
         },
         {
           Header: 'Price',
@@ -65,7 +66,7 @@ class EventIndexComponent extends Component {
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} modelName={"Events"} user={this.props.user} />
+        <CustomReactTable columns={this.state.columns} modelName={"Events"} user={this.props.user} modes={'pastEvents'} />
       </div >
     )
   }

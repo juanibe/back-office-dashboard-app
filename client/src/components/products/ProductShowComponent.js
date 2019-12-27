@@ -4,6 +4,7 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 import axios from "axios";
 import { getJwt } from '../../helpers/jwt'
 
+const Moment = require('moment');
 
 class ProductShowComponent extends Component {
   constructor(props) {
@@ -109,9 +110,9 @@ class ProductShowComponent extends Component {
               {this.state.product.event.map(event => {
                 return (
                   <div className="upcoming-events-show-product">
+                    <p><b>Date: {Moment(event.date).format('DD-MM-YYYY')}</b></p>
                     <p>Client: {event.client[0].full_name}</p>
                     <p>Place: {event.place}</p>
-                    <p>Date: {event.date}</p>
                     <p>{event.comment}</p>
                     <div className="divisory-line">
                     </div>

@@ -8,13 +8,13 @@ import Select from 'react-select'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+const Moment = require('moment');
 
-
-class ClientAddComponent extends Component {
+class EventAddComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      client: "",
+      client: [],
       product: [],
       date: new Date(),
       place: "",
@@ -46,7 +46,7 @@ class ClientAddComponent extends Component {
       price,
       comment
     }
-
+    console.log(data)
 
     const headers = {
       'Authorization': `Bearer ${jwt}`,
@@ -131,8 +131,11 @@ class ClientAddComponent extends Component {
                 value={this.state.client}
                 onChange={e => { this.handleChange(e) }}
               >
+                <option value={""}>Select</option>
                 {this.state.clients.map((response, index) => {
-                  return <option key={index} value={response._id}>{response.full_name}</option>
+                  return (
+                    <option key={index} value={response._id}>{response.full_name}</option>
+                  )
                 })}
               </Form.Control>
             </Form.Group>
@@ -145,6 +148,7 @@ class ClientAddComponent extends Component {
                 <Form.Label>Date </Form.Label>
               </div>
               <DatePicker
+                dateFormat="dd-MM-yyyy"
                 onChange={e => { this.handleDateSelectChange(e) }}
                 selected={this.state.date}
               />
@@ -191,4 +195,4 @@ class ClientAddComponent extends Component {
   }
 }
 
-export default withRouter(ClientAddComponent);
+export default withRouter(EventAddComponent);

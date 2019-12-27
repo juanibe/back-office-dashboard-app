@@ -73,7 +73,6 @@ class SideBar extends Component {
       .then(() => {
         axios.get(`http://localhost:3001/api/v1/images/${this.state.user.image[0]}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
           .then(response => {
-            console.log("RESPONSE FILE IMAGE", response)
             this.setState({ image: response.data.cloudImage })
           })
       })
@@ -90,7 +89,6 @@ class SideBar extends Component {
 
 
   render() {
-    console.log("STATE SIDEBAR", this.state)
     if (!this.state.user && !this.state.image) {
       return (
         <div>Loading...</div>
