@@ -128,9 +128,7 @@ class EventAddComponent extends Component {
                 type="text"
                 placeholder="Client"
                 name="client"
-                value={this.state.client}
-                onChange={e => { this.handleChange(e) }}
-              >
+                onChange={e => { this.handleChange(e) }}>
                 <option value={""}>Select</option>
                 {this.state.clients.map((response, index) => {
                   return (

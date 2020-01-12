@@ -4,6 +4,7 @@ const router = express.Router();
 const client_controller = require("../../controllers/clientController");
 
 router.get('/count-documents', client_controller.countDocuments);
+router.get('/count-total', client_controller.countTotalDocuments);
 router.get('/', client_controller.index);
 router.get('/:id', client_controller.show);
 router.post('/', client_controller.create);

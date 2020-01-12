@@ -22,19 +22,6 @@ const CategorySchema = new Schema({
 
 // Static method
 
-CategorySchema.statics.list = function (filters) {
-  return new Promise((resolve, reject) => {
-    const query = Category.find(filters);
-    query.exec().then(response => {
-      categories = response
-      resolve(categories)
-    })
-      .catch(error => {
-        reject(error)
-      })
-  })
-}
-
 
 const Category = mongoose.model('Category', CategorySchema);
 

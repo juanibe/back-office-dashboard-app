@@ -10,22 +10,12 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      token: null,
-      user: null
     }
   }
 
   componentDidMount() {
-    const jwt = getJwt()
-    this.setState({ token: jwt })
-    const headers = {
-      'Authorization': `Bearer ${jwt}`,
-    }
-    axios.get('http://localhost:3001/api/v1/get-user', {
-      headers: headers,
-    }).then(response => {
-      this.setState({ user: response.data.user })
-    })
+
+
 
   }
 

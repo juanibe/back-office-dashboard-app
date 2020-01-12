@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import axios from 'axios'
 import { getJwt } from '../../helpers/jwt'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import Select from 'react-select'
 
 
@@ -102,6 +102,7 @@ class ProductEditComponent extends Component {
   }
 
   render() {
+    console.log("edit product", this.props)
     if (!this.state.categories) {
       return (
         <div>Loading...</div>
@@ -122,7 +123,7 @@ class ProductEditComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Add Comment</Form.Label>
+          <Form.Label>Comment</Form.Label>
           <Form.Group controlId="formGroupComment">
             <Form.Control as="textarea" rows="3"
               size="sm"
@@ -133,7 +134,7 @@ class ProductEditComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Add Description</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Group controlId="formGroupDescription">
             <Form.Control as="textarea" rows="3"
               size="sm"
@@ -144,7 +145,7 @@ class ProductEditComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          <Form.Label>Add price</Form.Label>
+          <Form.Label>Price</Form.Label>
           <Form.Group controlId="formGroupPrice">
             <Form.Control
               size="sm"
@@ -158,18 +159,6 @@ class ProductEditComponent extends Component {
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Categories</Form.Label>
             <Select defaultValue={this.state.category} options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
-            {/* <Form.Control as="select"
-              size="sm"
-              type="text"
-              placeholder="Category type"
-              name="category"
-              value={this.state.category}
-              onChange={e => { this.handleChange(e) }}
-            >
-              {this.state.categories.map((response, index) => {
-                return <option key={index} value={response.name}>{response.name}</option>
-              })}
-            </Form.Control> */}
           </Form.Group>
           <Form.Group controlId="formGroupAvailable">
             <Form.Check
@@ -179,7 +168,10 @@ class ProductEditComponent extends Component {
               onChange={e => { this.toggleChange(e) }}
             />
           </Form.Group>
-          <button className="btn btn-light btn-submit">Submit</button>
+          <Link to={{ pathname: '/edit-image', id: this.props.match.params.id, routePath: '/products' }} className='btn-sm'>Edit picture</Link>
+          <div>
+            <button className="btn-sm btn-light btn-submit">Submit</button>
+          </div>
         </Form>
       </div >
     )

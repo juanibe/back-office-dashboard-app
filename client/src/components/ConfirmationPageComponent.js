@@ -10,6 +10,7 @@ class ConfirmationPageComponent extends Component {
     this.state = {
       item: {},
       image: {},
+      waitMessage: ""
     }
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
@@ -21,7 +22,6 @@ class ConfirmationPageComponent extends Component {
 
     axios.get(`http://localhost:3001/api/v1${prevLocationPath}/${id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
-        console.log(response)
         this.setState({ item: response.data })
       })
   }
@@ -39,6 +39,8 @@ class ConfirmationPageComponent extends Component {
     const headers = {
       'Authorization': `Bearer ${jwt}`,
     }
+
+    this.setState({ waitMessage: true })
 
     axios.post('http://localhost:3001/api/v1/images', formData, {
       headers: headers,
@@ -73,15 +75,13 @@ class ConfirmationPageComponent extends Component {
       <div className='confirm-form-main'>
         <div>
           <h5 className="form-title">The item has been created successfully!</h5>
-          {/* {Object.values(this.state.item).map(data => {
-          return <p>{data}</p>
-        })} */}
         </div>
         <div>
           <Form onSubmit={this.handleFormSubmit} encType="multipart/form-data">
             <Form.Row>
               <Form.Group>
                 <Form.Label>Now you can upload an image...</Form.Label>
+
                 <Form.Control
                   required
                   type="file"
@@ -90,13 +90,13 @@ class ConfirmationPageComponent extends Component {
                 />
               </Form.Group>
               <Form.Group>
-                <button className="btn-sm btn-outline-info btn-submit">Finish</button>
-              </Form.Group>
-              <Form.Group>
                 <button className="btn-sm btn-success btn-submit">Upload</button>
               </Form.Group>
-
             </Form.Row>
+            {this.state.waitMessage ?
+              <div style={{ color: "rgb(200,50,50)" }}>Please wait until the image is being uploaded...</div> :
+              <button className="btn-sm btn-outline-info" onClick={() => this.props.history.push(this.props.location.state.loc.slice(0, -4))}>Finish</button>
+            }
           </Form>
         </div>
       </div >
