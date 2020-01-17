@@ -1,17 +1,28 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 
-exports.applyFilters = function (modelName, filtered, sorted, pageSize, page) {
+exports.applyFilters = function (modelName, filtered, sorted, pageSize, page, mode) {
 
   let Model = mongoose.model(modelName)
   let sort = {}
   const filters = transformFiltersToObject(filtered)
-  const date = new Date()
+  if (filters.date) filters.date = parseInt(filters.date)
   if (sorted) sort = transformSortToObject(sorted)
   if (pageSize) var recordsPerPage = parseInt(pageSize)
   if (page) var pageNo = parseInt(page)
+
   if (modelName === 'Event') {
-    filters.date = { $gte: new Date() }
+    if (!filters.date) {
+      filters.date = { $gte: moment().subtract(1, "days") }
+    }
+    if (filters.date === 1) {
+      filters.date = { $gte: moment().subtract(1, "days") }
+    } else if (filters.date === -1) {
+      filters.date = { $lt: moment().subtract(1, "days") }
+    } else if (filters.date === 2) {
+      filters.date = { $gte: moment("1970-01-01") }
+    }
   }
 
   return new Promise((resolve, reject) => {
@@ -34,9 +45,27 @@ exports.applyFilters = function (modelName, filtered, sorted, pageSize, page) {
   })
 }
 
+exports.countTotalDocuments = function (modelName) {
+  let Model = mongoose.model(modelName)
+  return new Promise((resolve, reject) => {
+    const query = Model
+      .find()
+      .countDocuments()
+    query.exec()
+      .then(response => {
+        count = response
+        resolve(count)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  })
+}
+
 exports.countDocuments = function (modelName, filtered) {
   let Model = mongoose.model(modelName)
   const filters = transformFiltersToObject(filtered)
+
   return new Promise((resolve, reject) => {
     const query = Model
       .find(filters)
@@ -49,7 +78,6 @@ exports.countDocuments = function (modelName, filtered) {
         console.log(error)
       })
   })
-
 }
 
 transformSortToObject = function (queryString) {

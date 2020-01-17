@@ -41,7 +41,13 @@ class EventIndexComponent extends Component {
           id: 'date',
           Header: 'Date',
           accessor: d => { return Moment(d.date).format('DD-MM-YYYY') },
-          filterable: false,
+          filterable: true,
+          Filter: ({ filter, onChange }) =>
+            <select style={{ width: "100%", height: "100%" }} onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined}>
+              <option value={1}>Upcoming events</option>
+              <option value={-1}>Past events</option>
+              <option value={2}>All events</option>
+            </select>,
         },
         {
           Header: 'Price',
@@ -49,6 +55,7 @@ class EventIndexComponent extends Component {
           filterable: true,
         },
       ],
+      showAddButton: false
     }
   }
 
@@ -61,12 +68,21 @@ class EventIndexComponent extends Component {
       .then(response => {
         this.setState({ clients: response.data.result })
       })
+
+    if (this.props.user.role === 'admin' || this.props.user.role === 'employee') {
+      this.setState({ showAddButton: true })
+    }
   }
 
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} modelName={"Events"} user={this.props.user} modes={'pastEvents'} />
+        <CustomReactTable
+          columns={this.state.columns}
+          modelName={"Events"}
+          user={this.props.user}
+          showAddButton={this.state.showAddButton}
+        />
       </div >
     )
   }

@@ -1,5 +1,6 @@
 const Event = require('../models/Event');
-const Client = require('../models/Client');
+const Product = require('../models/Event');
+
 const GeneralRepository = require('../repositories/generalRepository');
 
 
@@ -9,8 +10,9 @@ exports.index = function (req, res) {
   const sorted = req.query.sorted
   const pageSize = req.query.pageSize
   const page = req.query.page
+  const mode = req.query.mode
 
-  GeneralRepository.applyFilters('Event', filtered, sorted, pageSize, page)
+  GeneralRepository.applyFilters('Event', filtered, sorted, pageSize, page, mode)
     .then(response => {
       res.json({ result: response })
     })
@@ -24,26 +26,23 @@ exports.create = function (req, res) {
   const price = req.body.price;
   const comment = req.body.comment;
 
-  Client.findById(client)
-    .then(client => {
-      const event = new Event({
-        client,
-        product,
-        date,
-        place,
-        price,
-        comment
-      });
-      event.save(err => {
-        if (err) {
-          res
-            .status(400)
-            .json({ message: "Saving event to database went wrong." });
-          return;
-        }
-        res.send(event);
-      })
-    })
+  const event = new Event({
+    client,
+    product,
+    date,
+    place,
+    price,
+    comment
+  });
+  event.save(err => {
+    if (err) {
+      res
+        .status(400)
+        .json({ message: "Saving event to database went wrong." });
+      return;
+    }
+    res.send(event);
+  })
 }
 
 exports.show = function (req, res) {
@@ -59,7 +58,6 @@ exports.show = function (req, res) {
 exports.update = function (req, res) {
 
   Event.findOneAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
-
     if (err) console.log(err);
 
     res.send(result);
@@ -84,6 +82,15 @@ exports.delete = function (req, res) {
 
 exports.countDocuments = function (req, res) {
   GeneralRepository.countDocuments('Event', req.query.filtered)
+    .then(response => {
+      res.json({ result: response })
+    }).catch(error => {
+      console.log(error)
+    })
+}
+
+exports.countTotalDocuments = function (req, res) {
+  GeneralRepository.countDocuments('Event')
     .then(response => {
       res.json({ result: response })
     }).catch(error => {

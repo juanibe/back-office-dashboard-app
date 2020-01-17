@@ -81,6 +81,7 @@ const categories = require('./routes/api-routes/category')
 const clients = require('./routes/api-routes/client')
 const events = require('./routes/api-routes/event')
 const images = require('./routes/api-routes/image')
+const general = require('./routes/api-routes/general')
 
 
 app.use('/api/v1', index);
@@ -91,5 +92,6 @@ app.use('/api/v1/categories', passport.authenticate('jwt', { session: false }), 
 app.use('/api/v1/clients', passport.authenticate('jwt', { session: false }), acl.authorize, clients)
 app.use('/api/v1/events', passport.authenticate('jwt', { session: false }), acl.authorize, events)
 app.use('/api/v1/images', passport.authenticate('jwt', { session: false }), acl.authorize, upload.any(), images)
+app.use('/api/v1/general', passport.authenticate('jwt', { session: false }), acl.authorize, general)
 
 module.exports = app;
