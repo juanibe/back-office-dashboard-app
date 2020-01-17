@@ -97,13 +97,13 @@ exports.login = (req, res, next) => {
   const password = req.body.password;
 
   if (!email || !password) {
-    res.status(400).json({ message: "Provide email and password" });
+    res.status(400).json({ message: "Provide valid email and password" });
     return;
   }
 
   User.findOne({ email }).then(user => {
     if (!user) {
-      return res.status(400).json({ message: 'You have to enter email and password' });
+      return res.status(400).json({ message: 'You need to enter a valid email address' });
     }
 
     bcrypt.compare(req.body.password, user.password, (error, response) => {
@@ -115,7 +115,7 @@ exports.login = (req, res, next) => {
         const token = jwt.sign(payload, 'Secret');
         res.json({ token: token, user: user });
       } else {
-        return res.json({ success: false, message: 'Passwords do not match' });
+        res.status(400).json({ message: 'Invalid password' });
       }
     })
 

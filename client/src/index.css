@@ -25,17 +25,45 @@ code {
 }
 
 .login-form{
-  width: 20%;
+  width: 100px;
   margin: 0 auto;
-  margin-top: 10%;
+  margin-top:9%;
   padding: 100px 30px 100px 30px ;
-  background-color:#0292B7;
   border-radius: 10px; 
 }
 
+.login-pres{
+  text-align: center;
+  background-color:#0292B7;
+  min-height: 100vh;
+
+}
+.login-title{
+  text-align: center;
+  margin-top: 33%;
+}
+
 .btn-login{
-  margin-top: 25px;
-  border: 1px solid black !important
+  position: relative;
+  left: 42%;
+  font-size: 0.9em;
+}
+
+.main-title-login{
+  font-style: italic;
+}
+
+.form-fields{
+  position: relative;
+  left: 12%;
+  width: 60%;
+}
+
+.login-error-message{
+  font-size: 0.7em;
+  border: 1px solid rgb(200, 50, 50);
+  text-align: center;
+  color: rgb(200,50,50);
 }
 
 .main-content{
