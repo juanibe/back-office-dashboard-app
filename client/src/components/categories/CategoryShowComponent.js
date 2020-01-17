@@ -26,6 +26,26 @@ class CategoryShowComponent extends Component {
       })
   }
 
+  loadFunctionalities = () => {
+    if (this.props.user.role === 'admin') {
+      return (
+        <div className="btn-group-product-show">
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={() => { this.props.history.push(`edit`) }}>Edit</button>
+          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
+          <button className="btn-product-show btn-xs btn-outline-danger" onClick={() => { this.onClickDeleteButton() }}>Delete</button>
+        </div >
+      )
+    } else {
+      return (
+        <div className="btn-group-product-show">
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
+          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
+        </div >
+      )
+    }
+  }
+
   toggleShowId = () => {
     this.setState({ showId: !this.state.showId, hideId: !this.state.hideId })
 
@@ -62,12 +82,7 @@ class CategoryShowComponent extends Component {
             />
           )
         }
-        <div className="btn-group-product-show">
-          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
-          <button className="btn-product-show btn-xs btn-outline-dark" onClick={() => { this.props.history.push(`edit`) }}>Edit</button>
-          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
-          <button className="btn-product-show btn-xs btn-outline-danger" onClick={() => { this.onClickDeleteButton() }}>Delete</button>
-        </div >
+        {this.loadFunctionalities()}
         {this.state.showId ? <div style={{ fontSize: "0.7em", display: "inline-block", color: "green", padding: "5px", margin: "0 0 10px 0" }}>Unique Id: <b>{this.state.category_id}</b></div> : <div></div>}
         <h3>Name: <b>{this.state.category.name}</b></h3>
         <h5>Description: {this.state.category.description}</h5>

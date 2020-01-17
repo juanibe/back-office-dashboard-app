@@ -21,7 +21,6 @@ class ProductShowComponent extends Component {
 
   toggleShowId = () => {
     this.setState({ showId: !this.state.showId, hideId: !this.state.hideId })
-
   }
 
 
@@ -45,6 +44,26 @@ class ProductShowComponent extends Component {
             this.setState({ image: response.data })
           })
       })
+  }
+
+  loadFunctionalities = () => {
+    if (this.props.user.role === 'admin') {
+      return (
+        <div className="btn-group-product-show">
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={() => { this.props.history.push(`edit`) }}>Edit</button>
+          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
+          <span><button className="btn-product-show btn-xs btn-outline-danger" onClick={() => this.setState({ alert: true })}>Delete</button></span>
+        </div >
+      )
+    } else {
+      return (
+        <div className="btn-group-product-show">
+          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
+          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
+        </div >
+      )
+    }
   }
 
 
@@ -72,12 +91,7 @@ class ProductShowComponent extends Component {
           </SweetAlert>
           )}
         </div>
-        <div className="btn-group-product-show">
-          <button className="btn-product-show btn-xs btn-outline-dark" onClick={this.props.history.goBack}>Go back</button>
-          <button className="btn-product-show btn-xs btn-outline-dark" onClick={() => { this.props.history.push(`edit`) }}>Edit</button>
-          <span><button className="btn-product-show btn-xs btn-outline-dark" onClick={this.toggleShowId}>{this.state.hideId ? "Hide item ID" : "Show item ID"}</button></span>
-          <span><button className="btn-product-show btn-xs btn-outline-danger" onClick={() => this.setState({ alert: true })}>Delete</button></span>
-        </div >
+        {this.loadFunctionalities()}
         <div className="cointainer">
           <div className="product-show-description-image-container row">
             <div className="col-6">
@@ -90,35 +104,14 @@ class ProductShowComponent extends Component {
               <h5>This product belongs to these categories:</h5>
               {this.state.product.category.map(category => {
                 return (
-                  <p>{category.name}</p>
+                  <p key={category._id}>{category.name}</p>
                 )
               })}
               <h5>Available</h5>
-              <p>{this.state.product.available ? <p style={{ color: "green" }}>Yes</p> : <p style={{ color: "red" }}>No</p>}</p>
+              {this.state.product.available ? <p style={{ color: "green" }}>Yes</p> : <p style={{ color: "red" }}>No</p>}
             </div>
             <div className="col-6">
               <img className="image-show-product" src={this.state.image.cloudImage}></img>
-            </div>
-          </div>
-          <div className="divisory-line">
-          </div>
-          <div className="row">
-            <div className="col-3">
-              <h5>Upcoming events</h5>
-            </div>
-            <div className="col-9">
-              {this.state.product.event.map(event => {
-                return (
-                  <div className="upcoming-events-show-product">
-                    <p><b>Date: {Moment(event.date).format('DD-MM-YYYY')}</b></p>
-                    <p>Client: {event.client[0].full_name}</p>
-                    <p>Place: {event.place}</p>
-                    <p>{event.comment}</p>
-                    <div className="divisory-line">
-                    </div>
-                  </div>
-                )
-              })}
             </div>
           </div>
         </div>

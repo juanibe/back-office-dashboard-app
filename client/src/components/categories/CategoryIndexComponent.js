@@ -19,7 +19,8 @@ class CategoryIndexComponent extends Component {
           Header: "Description",
           accessor: "description"
         },
-      ]
+      ],
+      showAddButton: false
     }
   }
 
@@ -28,12 +29,15 @@ class CategoryIndexComponent extends Component {
     if (!jwt) {
       this.props.history.push('/login')
     }
+    if (this.props.user.role === 'admin') {
+      this.setState({ showAddButton: true })
+    }
   }
 
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} modelName={'Category'} user={this.props.user} />
+        <CustomReactTable showAddButton={this.state.showAddButton} columns={this.state.columns} modelName={'Category'} user={this.props.user} />
       </div >
     )
   }

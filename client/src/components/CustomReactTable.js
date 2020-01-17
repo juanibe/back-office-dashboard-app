@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Select from 'react-select'
 import DeleteComponent from "../components/DeleteComponent"
 import ReactTable from 'react-table';
 import { Link, withRouter } from 'react-router-dom';
@@ -7,7 +8,6 @@ import { getJwt } from '../helpers/jwt'
 import eye from '../img/eye.png'
 import bin from '../img/bin.png'
 import writing from '../img/writing.png'
-
 
 class CustomReactTable extends Component {
   constructor(props) {
@@ -20,6 +20,7 @@ class CustomReactTable extends Component {
       totalItems: null,
       loading: false,
       state: {},
+      mode: null
     }
   }
 
@@ -58,6 +59,26 @@ class CustomReactTable extends Component {
       })
   }
 
+  handleModeChange = event => {
+    this.props.history.push(`${this.props.match.url}&mode=${event.value}`)
+    // const jwt = getJwt()
+    // let config = {
+    //   headers: { 'Authorization': `Bearer ${jwt}` },
+    //   params: {
+    //     mode: event.value
+    //   }
+    // }
+    // axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}`, config)
+    //   .then(response => {
+    //     this.setState({
+    //       data: response.data.result,
+    //     })
+    //   })
+    // this.setState({
+    //   mode: event.value
+    // });
+  }
+
   loadOptions = () => {
     let columnsArray = this.props.columns
     columnsArray = {}
@@ -74,12 +95,10 @@ class CustomReactTable extends Component {
       columnsArray = {
         Header: "",
         Cell: (row) => [
-          <div>
-            <Link to={`${this.props.location.pathname}/${row.original._id}/show`} key={row.original._id} params={{ id: row.original._id }}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={eye} /></button></Link>
-            <Link to={`${this.props.location.pathname}/${row.original._id}/edit`} key={row.original._id + 'a'}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={writing} /></button></Link>
-            <button key={row.original._id + 'b'} className="btn-xs btn-outline-light" onClick={() => { this.onClickDeleteButton(row.original._id) }}><img style={{ width: '1em' }} src={bin} /></button>
-            <input key={row.original._id + 'c'} type='checkbox'></input>
-          </div>
+          <Link to={`${this.props.location.pathname}/${row.original._id}/show`} key={row.original._id} params={{ id: row.original._id }}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={eye} /></button></Link>,
+          <Link to={`${this.props.location.pathname}/${row.original._id}/edit`} key={row.original._id + 'a'}><button className="btn-xs btn-outline-light"><img style={{ width: '1em' }} src={writing} /></button></Link>,
+          <button key={row.original._id + 'b'} className="btn-xs btn-outline-light" onClick={() => { this.onClickDeleteButton(row.original._id) }}><img style={{ width: '1em' }} src={bin} /></button>,
+          <input key={row.original._id + 'c'} type='checkbox'></input>
         ]
       }
     }
@@ -92,14 +111,7 @@ class CustomReactTable extends Component {
     const refreshTable = <span className='functionalities-refresh-table'><button onClick={() => { this.refreshTableFilters() }} className="btn-sm btn-outline-dark">Refresh table</button></span>
     const addButton = <span className='functionalities-add-item-table'> <Link to={`${this.props.location.pathname}/add`}><button className="btn-sm btn-outline-success">Add new {this.props.modelName}</button></Link></span>
 
-    if (this.props.user.role !== 'admin') {
-      return (
-        <div className='functionalities-react-table'>
-          {refreshTable}
-          {selectAll}
-        </div>
-      )
-    } else {
+    if (this.props.showAddButton) {
       return (
         <div className='functionalities-react-table'>
           {addButton}
@@ -107,12 +119,14 @@ class CustomReactTable extends Component {
           {selectAll}
         </div>
       )
+    } else {
+      return (
+        <div className='functionalities-react-table'>
+          {refreshTable}
+          {selectAll}
+        </div>
+      )
     }
-
-  }
-
-  loadModes = () => {
-    return <span className='functionalities-add-item-table'> <Link to={`${this.props.location.pathname}/add`}><button style={{ fontSize: "0.7em" }} className=""> Show past events</button></Link></span>
   }
 
   onClickDeleteButton = (id) => {
@@ -155,7 +169,6 @@ class CustomReactTable extends Component {
         )}
         <h3>{`${this.props.modelName} (${this.state.totalItems})`}</h3>
         {this.loadFunctionalities()}
-        {this.loadModes()}
         <ReactTable
           data={this.state.data}
           columns={this.props.columns}

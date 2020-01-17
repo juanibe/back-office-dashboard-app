@@ -64,6 +64,7 @@ class ProductIndexComponent extends Component {
         },
       ],
       categories: [],
+      showAddButton: true
     }
   }
 
@@ -81,7 +82,7 @@ class ProductIndexComponent extends Component {
   render() {
     return (
       <div className='main-content'>
-        <CustomReactTable columns={this.state.columns} modelName={"Products"} user={this.props.user} />
+        <CustomReactTable showAddButton={this.state.showAddButton} columns={this.state.columns} modelName={"Products"} user={this.props.user} />
       </div >
     )
   }
