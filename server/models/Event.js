@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Product = require('../models/Product');
 
 
 const EventSchema = new Schema({
@@ -56,10 +55,11 @@ const EventSchema = new Schema({
  * Find a better place to do it?
  */
 
+
 EventSchema.post("save", function (doc) {
-  Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString() } }, { multi: true }, function (error, product) {
-    if (error) console.log(error)
-  })
+  // Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString() } }, { multi: true }, function (error, product) {
+  //   if (error) console.log(error)
+  // })
 
   // Client required here => It may due to cyclic dependency Client model may also depend on the model calling it.
   // Check better options
@@ -69,20 +69,14 @@ EventSchema.post("save", function (doc) {
   })
 })
 
+// EventSchema.post("findOneAndUpdate", function (doc) {
+//   Product.updateMany({ _id: { $in: doc.product } }, { event: doc._id.toString() }, { multi: true }, function (error, product) {
+//     if (error) console.log(error)
+//   })
+// })
 
-EventSchema.post("findOneAndUpdate", function (doc) {
-  Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString() } }, { multi: true }, function (error, product) {
-    if (error) console.log(error)
-  })
-})
-
-
-EventSchema.statics.filterByDate = function filterByDate(cb) {
-  return this.where('date', { $gte: new Date() }).exec(cb)
-}
 
 const Event = mongoose.model('Event', EventSchema);
-
 
 
 module.exports = Event;

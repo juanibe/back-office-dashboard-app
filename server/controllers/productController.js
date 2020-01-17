@@ -50,7 +50,6 @@ exports.show = function (req, res) {
 
   Product.findById(req.params.id)
     .populate('category')
-    .populate({ path: 'event', populate: { path: 'client' } })
     .then((product) => {
       res.send(product)
     });
@@ -82,8 +81,18 @@ exports.delete = function (req, res) {
   })
 }
 
+
 exports.countDocuments = function (req, res) {
   GeneralRepository.countDocuments('Product', req.query.filtered)
+    .then(response => {
+      res.json({ result: response })
+    }).catch(error => {
+      console.log(error)
+    })
+}
+
+exports.countTotalDocuments = function (req, res) {
+  GeneralRepository.countDocuments('Product')
     .then(response => {
       res.json({ result: response })
     }).catch(error => {

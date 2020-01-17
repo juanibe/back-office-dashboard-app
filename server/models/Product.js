@@ -43,13 +43,6 @@ const ProductSchema = new Schema({
     }]
   },
 
-  event: {
-    type: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Event'
-    }]
-  },
-
   image: {
     type: [{
       type: Schema.Types.ObjectId,
