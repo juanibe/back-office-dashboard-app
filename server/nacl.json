@@ -15,28 +15,9 @@
       {
         "resource": "products/*",
         "methods": [
-          "GET"
-        ],
-        "action": "allow"
-      },
-      {
-        "resource": "categories/count-documents",
-        "methods": [
-          "GET"
-        ],
-        "action": "allow"
-      },
-      {
-        "resource": "events/count-documents",
-        "methods": [
-          "GET"
-        ],
-        "action": "allow"
-      },
-      {
-        "resource": "clients/count-documents",
-        "methods": [
-          "GET"
+          "GET",
+          "POST",
+          "PUT"
         ],
         "action": "allow"
       },
@@ -48,23 +29,33 @@
         "action": "allow"
       },
       {
-        "resource": "events",
+        "resource": "clients/*",
         "methods": [
           "GET"
         ],
         "action": "allow"
       },
       {
-        "resource": "clients",
+        "resource": "events/*",
         "methods": [
-          "GET"
+          "GET",
+          "POST",
+          "PUT"
         ],
         "action": "allow"
+      },
+      {
+        "resource": "users/*",
+        "methods": [
+          "*"
+        ],
+        "action": "deny"
       },
       {
         "resource": "images/*",
         "methods": [
-          "GET"
+          "GET",
+          "POST"
         ],
         "action": "allow"
       }
