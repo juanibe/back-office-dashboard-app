@@ -24,12 +24,23 @@ exports.show = function (req, res) {
 
 exports.update = function (req, res) {
 
-  User.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
 
-    if (err) console.log(err);
-
-    res.send(result);
-  })
+  if (req.user._id.toString() === req.params.id) {
+    const prevRole = req.user.role;
+    if (prevRole !== req.body.role) {
+      res.json({ message: "Can not update own user role. Please, contact super admin or aonther admin user" })
+    } else {
+      User.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
+        if (err) console.log(err);
+        res.send(result);
+      })
+    }
+  } else {
+    User.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
+      if (err) console.log(err);
+      res.send(result);
+    })
+  }
 }
 
 exports.delete = function (req, res) {
@@ -50,6 +61,15 @@ exports.delete = function (req, res) {
 
 exports.countDocuments = function (req, res) {
   GeneralRepository.countDocuments('User', req.query.filtered)
+    .then(response => {
+      res.json({ result: response })
+    }).catch(error => {
+      console.log(error)
+    })
+}
+
+exports.countTotalDocuments = function (req, res) {
+  GeneralRepository.countDocuments('User')
     .then(response => {
       res.json({ result: response })
     }).catch(error => {

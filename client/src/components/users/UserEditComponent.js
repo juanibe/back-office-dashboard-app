@@ -3,19 +3,18 @@ import Form from "react-bootstrap/Form";
 import axios from 'axios'
 import { getJwt } from '../../helpers/jwt'
 import { withRouter } from 'react-router-dom'
-import Select from 'react-select'
-
-
 
 class UserEditComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      id: "",
       first_name: "",
       last_name: "",
       email: "",
       password: "",
       role: "",
+      warningMessage: false
     }
   }
 
@@ -25,6 +24,7 @@ class UserEditComponent extends Component {
     axios.get(`http://localhost:3001/api/v1/users/${this.props.match.params.id}`, { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         this.setState({
+          id: response.data._id,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
           email: response.data.email,
@@ -64,12 +64,27 @@ class UserEditComponent extends Component {
 
   handleChange = event => {
     const { name, value } = event.target;
+    if (event.target.value === 'admin') {
+      this.setState({
+        warningMessage: true,
+      });
+    } else if (event.target.value === 'employee') {
+      this.setState({
+        warningMessage: false
+      });
+    }
     this.setState({
-      [name]: value
+      [name]: value,
     });
+
   };
 
   render() {
+    // if (!this.props.user) {
+    //   return (
+    //     <div>Loading...</div>
+    //   )
+    // }
     return (
       <div className='add-product-form-main'>
         <h4 className="form-title">Edit user</h4>
@@ -107,26 +122,19 @@ class UserEditComponent extends Component {
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
-          {/* <Form.Label>Password</Form.Label>
-          <Form.Group controlId="formGroupComment">
-            <Form.Control
-              size="sm"
-              type="password"
-              placeholder="Enter password"
-              name="password"
-              value={this.state.password}
-              onChange={e => { this.handleChange(e) }}
-            />
-          </Form.Group> */}
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Role</Form.Label>
-            <Form.Control value={this.state.role} name="role" as="select" size="sm" onChange={e => { this.handleChange(e) }}>
+            {/* disabled={this.props.user._id === this.state.id ? true : false} */}
+            <Form.Control disabled={this.props.user._id === this.state.id ? true : false} value={this.state.role} name="role" as="select" size="sm" onChange={e => { this.handleChange(e) }}>
               <option value=''>Select</option>
               <option value='admin'>Admin</option>
               <option value='employee'>Employee</option>
             </Form.Control>
+            {this.state.warningMessage &&
+              <div style={{ color: "rgb(200,50,50)", fontSize: "0.8em" }}>WARNING: Setting a user as admin will give him access to info that might be sensible</div>
+            }
           </Form.Group>
-          <button className="btn btn-light btn-submit">Submit</button>
+          <button className="btn-xs btn-light btn-submit">Submit</button>
         </Form>
       </div >
     )

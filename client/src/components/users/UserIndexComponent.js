@@ -28,12 +28,15 @@ class UserIndexComponent extends Component {
           accessor: 'role',
           filterable: true
         }
-      ]
+      ],
+      showAddButton: false
     }
   }
 
   componentDidMount() {
-
+    if (this.props.user.role === 'admin') {
+      this.setState({ showAddButton: true })
+    }
   }
 
 
@@ -41,7 +44,11 @@ class UserIndexComponent extends Component {
 
     return (
       <div className="main-content">
-        <CustomReactTable columns={this.state.columns} modelName={"Users"} user={this.props.user} />
+        <CustomReactTable
+          showAddButton={this.state.showAddButton}
+          columns={this.state.columns}
+          modelName={"Users"}
+          user={this.props.user} />
       </div >
     )
   }
