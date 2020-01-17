@@ -46,13 +46,13 @@ class Login extends Component {
       <div>
         <div className="container-fluid">
           <div className="row">
-            <div className="login-pres col-6">
+            <div className="login-pres col-7">
               <div className="login-title">
                 <h1 className="main-title-login">livings del pilar</h1>
                 <h4>admin panel</h4>
               </div>
             </div>
-            <div className="login-form col-6">
+            <div className="login-form col-5">
               <div className="form-fields">
                 <Form onSubmit={this.handleFormSubmit}>
                   <Form.Group controlId="formGroupEmail">
