@@ -85,3 +85,12 @@ exports.countDocuments = function (req, res) {
       console.log(error)
     })
 }
+
+exports.countTotalDocuments = function (req, res) {
+  GeneralRepository.countDocuments('Client')
+    .then(response => {
+      res.json({ result: response })
+    }).catch(error => {
+      console.log(error)
+    })
+}
