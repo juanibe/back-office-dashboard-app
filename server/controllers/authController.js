@@ -60,6 +60,37 @@ exports.register = function (req, res) {
   })
 }
 
+exports.updatePassword = function (req, res) {
+  const password = req.body.password
+  const confirmPassword = req.body.confirmPassword
+
+  console.log(password, confirmPassword)
+
+  if (!confirmPassword || !password) {
+    res.status(400).json({ message: "You have to provide a password" });
+    return;
+  }
+
+  if (confirmPassword !== password) {
+    res.status(400).json({ message: "The password does not match" });
+    return;
+  }
+
+  let salt = bcrypt.genSaltSync(10);
+  let hashPass = bcrypt.hashSync(password, salt);
+  let token = req.headers.authorization
+  let decoded = {}
+  if (token) {
+    decoded = jwtDecode(token)
+  }
+
+  User.findByIdAndUpdate(decoded.id, { password: hashPass }, { new: true }, (error, result) => {
+    if (error) console.log(error)
+    res.send(result)
+  })
+
+}
+
 exports.login = (req, res, next) => {
 
   const email = req.body.email;
@@ -97,6 +128,7 @@ exports.getUser = function (req, res, next) {
   if (token) {
     decoded = jwtDecode(token)
   }
+
   User.findById(decoded.id).then(response => {
     res.json({ user: response })
   })

@@ -1,6 +1,5 @@
-
 import React, { Component } from "react";
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import axios from "axios";
 import { getJwt } from '../helpers/jwt'
 
@@ -9,6 +8,8 @@ import AuthenticatedComponent from '../components/AuthenticatedComponent'
 import SideBar from "../components/SideBar";
 import ConfirmationPageComponent from "../components/ConfirmationPageComponent"
 import ProfileComponent from "../components/ProfileComponent"
+import EditPictureComponent from "../components/EditPictureComponent"
+import EditPasswordComponent from "../components/EditPasswordComponent";
 
 import ProductIndexComponent from './products/ProductIndexComponent'
 import ProductShowComponent from "./products/ProductShowComponent";
@@ -59,7 +60,7 @@ class Wrapper extends Component {
 
   loadRoutes = () => {
 
-    const protectedRoutes = ['c', 'd', 'g', 'i', 'k', 'm', 'o', 'q', 'r', 's', 't', 'u']
+    const protectedRoutes = ['d', 'g', 'i', 'k', 'm', 'r', 's', 't', 'u']
 
     let routes = [
       { id: 'a', path: '/', component: Home },
@@ -84,18 +85,19 @@ class Wrapper extends Component {
       { id: 't', path: '/users/:id/edit', component: UserEditComponent },
       { id: 'u', path: '/users/add', component: UserAddComponent },
       { id: 'v', path: '/confirm', component: ConfirmationPageComponent },
-      { id: 'w', path: '/profile', component: ProfileComponent }
+      { id: 'w', path: '/edit-image', component: EditPictureComponent },
+      { id: 'x', path: '/profile', component: ProfileComponent },
+      { id: 'y', path: '/edit-password', component: EditPasswordComponent }
     ]
 
     return routes.map((route) => {
-      if (this.state.user.role !== 'admin') {
+      if (this.state.user.role && this.state.user.role !== 'admin') {
         if (protectedRoutes.includes(route.id)) {
-          return <Route key={route.id} exact path={route.path} component={Home} />
+          return <Route key={route.id} exact path={route.path} component={() => { return <Home user={this.state.user} /> }} />
         }
       }
       return <Route key={route.id} exact path={route.path} component={() => { return <route.component user={this.state.user} /> }} />
     })
-
   }
 
   render() {

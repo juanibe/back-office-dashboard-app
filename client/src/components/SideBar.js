@@ -21,6 +21,10 @@ class SideBar extends Component {
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
 
+  updateImage = (image) => {
+    this.setState({ image: image })
+  }
+
   listItems = () => {
 
     const protectedRoutes = ['f', 'h', 'i']
@@ -49,7 +53,7 @@ class SideBar extends Component {
   }
 
   onSetSidebarOpen(open) {
-    this.setState({ sidebarOpen: open });
+    this.setState({ sidebarOpen: open, image: this.props.updateImage() });
   }
 
   mediaQueryChanged() {
@@ -87,7 +91,6 @@ class SideBar extends Component {
       })
   }
 
-
   render() {
     if (!this.state.user && !this.state.image) {
       return (
@@ -99,14 +102,21 @@ class SideBar extends Component {
         <Sidebar
           sidebar={
             <div>
-              <ul className="profile-presentation">
-                <img className="profile-pic rounded-circle" src={this.state.image} />
-                <li>{this.state.user.fullName}</li>
-                <li>{this.state.user.role}</li>
-              </ul>
-              <ul>
+              <div>
+                <figcaption>
+                  <Link to={'/profile'} className="profile-pic-link">
+                    <img className="profile-pic rounded-circle" src={this.state.image} />
+                    <ul style={{ fontSize: "0.7em", fontStyle: "italic" }}>
+                      <li key={this.state.user._id}>{this.state.user.fullName}</li>
+                      <li key={this.state.user._id + 'a'}>{this.state.user.email}</li>
+                      <li key={this.state.user._id + 'b'}><b>{this.state.user.role}</b></li>
+                    </ul>
+                  </Link>
+                </figcaption>
+              </div>
+              <div>
                 {this.listItems()}
-              </ul>
+              </div>
             </div>
           }
           open={this.state.sidebarOpen}
