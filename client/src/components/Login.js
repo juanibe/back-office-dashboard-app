@@ -82,6 +82,9 @@ class Login extends Component {
                   {this.state.error && (
                     <p className="login-error-message">{this.state.errorMessage}</p>
                   )}
+                  <div>
+                    <p className="login-forgot-password">Forgot your password?</p>
+                  </div>
                 </div>
               </div>
             </div>
