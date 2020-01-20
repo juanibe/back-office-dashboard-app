@@ -47,6 +47,11 @@ class Wrapper extends Component {
 
   componentDidMount() {
     const jwt = getJwt()
+
+    if (!jwt) {
+      this.props.history.push('/login')
+    }
+
     const headers = {
       'Authorization': `Bearer ${jwt}`,
     }
@@ -63,7 +68,7 @@ class Wrapper extends Component {
     const protectedRoutes = ['d', 'g', 'i', 'k', 'm', 'r', 's', 't', 'u']
 
     let routes = [
-      { id: 'a', path: '/', component: Home },
+      { id: 'a', path: '/home', component: Home },
       { id: 'b', path: '/products', component: ProductIndexComponent },
       { id: 'c', path: '/products/add', component: ProductAddComponent },
       { id: 'd', path: '/products/:id/edit', component: ProductEditComponent },
