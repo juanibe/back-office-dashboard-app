@@ -65,7 +65,7 @@ class EventAddComponent extends Component {
 
   loadOptions = () => {
     return this.state.products.map(product => {
-      return { value: product._id, label: product.name, disabled: product.available ? false : true }
+      return { value: product._id, label: product.name, disabled: product.disponible ? false : true }
     })
   }
 
@@ -139,7 +139,8 @@ class EventAddComponent extends Component {
             </Form.Group>
             <Form.Group controlId="exampleForm.ControlSelect1">
               <Form.Label>Products</Form.Label>
-              <Select options={this.loadOptions()} isOptionDisabled={(option) => { return option.disabled }} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
+              <Select isOptionDisabled={(option) => { return option.disabled }}
+                options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
             </Form.Group>
             <Form.Group controlId="exampleForm.ControlSelect1">
               <div>
