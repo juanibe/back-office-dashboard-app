@@ -9,6 +9,9 @@ import eye from '../img/eye.png'
 import bin from '../img/bin.png'
 import writing from '../img/writing.png'
 
+const Moment = require('moment');
+
+
 class CustomReactTable extends Component {
   constructor(props) {
     super(props)
