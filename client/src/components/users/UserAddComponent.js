@@ -124,6 +124,11 @@ class UserAddComponent extends Component {
               <option value='employee'>Employee</option>
             </Form.Control>
           </Form.Group>
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label>Salary ($)</Form.Label>
+            <Form.Control name="salary" type="number" defaultValue="0" min="0" size="sm" onChange={e => { this.handleChange(e) }}>
+            </Form.Control>
+          </Form.Group>
           <button className="btn btn-light btn-submit">Submit</button>
         </Form>
       </div >
