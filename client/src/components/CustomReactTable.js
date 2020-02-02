@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Select from 'react-select'
 import DeleteComponent from "../components/DeleteComponent"
 import ReactTable from 'react-table';
 import { Link, withRouter } from 'react-router-dom';
+import DatePicker from "react-datepicker";
 import axios from "axios";
 import { getJwt } from '../helpers/jwt'
 import eye from '../img/eye.png'
@@ -20,12 +20,13 @@ class CustomReactTable extends Component {
       totalItems: null,
       loading: false,
       state: {},
-      mode: null
+      dateAvailability: ""
     }
   }
 
   fetchData = (state) => {
     this.setState({ state: state })
+    state.dateAvailability = this.state.dateAvailability
     const jwt = getJwt()
     if (!jwt) {
       this.props.history.push('/login')
@@ -37,13 +38,15 @@ class CustomReactTable extends Component {
         page: state.page,
         pageSize: state.pageSize,
         sorted: state.sorted,
-        filtered: state.filtered
+        filtered: state.filtered,
+        dateAvailability: state.dateAvailability
       }
     }
     this.setState({ loading: true })
 
     axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}`, config)
       .then(response => {
+        console.log(response.data.result)
         this.setState({
           data: response.data.result,
           loading: false
@@ -57,26 +60,6 @@ class CustomReactTable extends Component {
           pages: Math.ceil(response.data.result / state.pageSize)
         })
       })
-  }
-
-  handleModeChange = event => {
-    this.props.history.push(`${this.props.match.url}&mode=${event.value}`)
-    // const jwt = getJwt()
-    // let config = {
-    //   headers: { 'Authorization': `Bearer ${jwt}` },
-    //   params: {
-    //     mode: event.value
-    //   }
-    // }
-    // axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}`, config)
-    //   .then(response => {
-    //     this.setState({
-    //       data: response.data.result,
-    //     })
-    //   })
-    // this.setState({
-    //   mode: event.value
-    // });
   }
 
   loadOptions = () => {
@@ -129,6 +112,14 @@ class CustomReactTable extends Component {
     }
   }
 
+  handleDateAvailability = (event) => {
+    this.setState({ dateAvailability: event })
+  }
+
+  checkDate = () => {
+    this.fetchData(Object.assign(this.state.state, this.state.dateAvailability))
+  }
+
   onClickDeleteButton = (id) => {
     this.setState({ showDelete: true, item: id })
   }
@@ -169,6 +160,15 @@ class CustomReactTable extends Component {
         )}
         <h3>{`${this.props.modelName} (${this.state.totalItems})`}</h3>
         {this.loadFunctionalities()}
+        <div>
+          <label>Availability</label>
+          <DatePicker
+            dateFormat="dd-MM-yyyy"
+            onChange={this.handleDateAvailability}
+            selected={this.state.dateAvailability}
+          />
+          <button onClick={() => { this.checkDate() }}>Check</button>
+        </div>
         <ReactTable
           data={this.state.data}
           columns={this.props.columns}
