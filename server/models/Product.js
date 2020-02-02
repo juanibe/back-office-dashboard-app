@@ -41,11 +41,6 @@ const ProductSchema = new Schema({
     default: true
   },
 
-  availability: {
-    type: Array,
-
-  },
-
   price: {
     type: Number,
     default: 0,
