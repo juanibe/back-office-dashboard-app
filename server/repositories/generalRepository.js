@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 
-exports.applyFilters = function (modelName, filtered, sorted, pageSize, page, mode) {
+exports.applyFilters = function (modelName, filtered, sorted, pageSize, page) {
 
   let Model = mongoose.model(modelName)
   let sort = {}
@@ -11,6 +11,7 @@ exports.applyFilters = function (modelName, filtered, sorted, pageSize, page, mo
   if (sorted) sort = transformSortToObject(sorted)
   if (pageSize) var recordsPerPage = parseInt(pageSize)
   if (page) var pageNo = parseInt(page)
+
 
   if (modelName === 'Event') {
     if (!filters.date) {
@@ -106,7 +107,8 @@ transformFiltersToObject = function (queryString) {
         filter['id'] === 'place' ||
         filter['id'] === 'last_name' ||
         filter['id'] === 'first_name' ||
-        filter['id'] === 'email'
+        filter['id'] === 'email' ||
+        filter['id'] === 'company_name'
       ) {
         filtered[id] = { '$regex': value, '$options': 'i' }
       } else {
