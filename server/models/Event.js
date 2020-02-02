@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Product = require('../models/Product');
+
+const moment = require('moment');
 
 
 const EventSchema = new Schema({
@@ -40,6 +43,17 @@ const EventSchema = new Schema({
     maxlength: 12000,
     minlength: 1,
   },
+
+  status: {
+    type: Number,
+    min: 0,
+    max: 1,
+    default: 0,
+    validate: {
+      validator: Number.isInteger,
+      message: '{VALUE} is not an integer value'
+    }
+  },
 },
   {
     toObject: { virtuals: true },
@@ -55,14 +69,24 @@ const EventSchema = new Schema({
  * Find a better place to do it?
  */
 
+// EventSchema.post("findOneAndUpdate", function (doc) {
+//   Product.find({ event: { $in: doc._id } }).then(response => { console.log("PROUCTS", response[0]._id) })
+//   console.log("testasdsadasassad", doc)
+// })
+
+// EventSchema.pre("updateOne", function (next) {
+//   let eventId = this.getQuery()['_id']
+//   Product.find({ event: eventId }).then(response => { response.map(items => { console.log(items._id) }) })
+//   next()
+// })
 
 EventSchema.post("save", function (doc) {
-  // Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString() } }, { multi: true }, function (error, product) {
-  //   if (error) console.log(error)
-  // })
+  Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString(), availability: doc.date } }, { multi: true }, function (error, product) {
+    if (error) console.log(error)
+  })
 
-  // Client required here => It may due to cyclic dependency Client model may also depend on the model calling it.
-  // Check better options
+
+
   const Client = require('../models/Client');
   Client.findByIdAndUpdate(doc.client[0], { $push: { event: doc._id.toString() } }, { new: true }, function (error, client) {
     if (error) console.log(error)
@@ -78,5 +102,6 @@ EventSchema.post("save", function (doc) {
 
 const Event = mongoose.model('Event', EventSchema);
 
+Event.updateMany({ date: { $lt: moment().format().toString() } }, { status: 1 }, { new: true }).then(result => { console.log(result) })
 
 module.exports = Event;

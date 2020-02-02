@@ -57,7 +57,12 @@ exports.show = function (req, res) {
 
 exports.update = function (req, res) {
 
-  Event.findOneAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
+  // Event.findOneAndUpdate(req.params.id, req.body, { new: true }, (err, result) => {
+  //   if (err) console.log(err);
+
+  //   res.send(result);
+  // })
+  Event.updateOne({ _id: req.params.id }, req.body, { new: true }, (err, result) => {
     if (err) console.log(err);
 
     res.send(result);
