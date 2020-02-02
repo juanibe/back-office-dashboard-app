@@ -80,12 +80,14 @@ const EventSchema = new Schema({
 //   next()
 // })
 
+EventSchema.pre("find", function () {
+  Event.updateMany({ date: { $lt: moment().format() } }, { status: 1 }, { new: true }).then(result => { console.log(result) })
+})
+
 EventSchema.post("save", function (doc) {
   Product.updateMany({ _id: { $in: doc.product } }, { $push: { event: doc._id.toString(), availability: doc.date } }, { multi: true }, function (error, product) {
     if (error) console.log(error)
   })
-
-
 
   const Client = require('../models/Client');
   Client.findByIdAndUpdate(doc.client[0], { $push: { event: doc._id.toString() } }, { new: true }, function (error, client) {
@@ -102,6 +104,5 @@ EventSchema.post("save", function (doc) {
 
 const Event = mongoose.model('Event', EventSchema);
 
-Event.updateMany({ date: { $lt: moment().format().toString() } }, { status: 1 }, { new: true }).then(result => { console.log(result) })
 
 module.exports = Event;
