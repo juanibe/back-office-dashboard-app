@@ -1,8 +1,11 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const Event = require('../models/Event');
 const GeneralRepository = require('../repositories/generalRepository');
+const moment = require('moment');
 
 exports.index = function (req, res) {
+
   const filtered = req.query.filtered
   const sorted = req.query.sorted
   const pageSize = req.query.pageSize
@@ -21,7 +24,9 @@ exports.create = function (req, res) {
   const price = req.body.data.price;
   const category = req.body.data.category;
   const state = req.body.data.state;
-  const available = req.body.data.available
+  const disponible = req.body.data.disponible;
+  const brand = req.body.data.brand;
+  const provider = req.body.data.provider
 
   Category.find({ _id: { $in: category } }).then(category => {
     const product = new Product({
@@ -31,7 +36,9 @@ exports.create = function (req, res) {
       comment,
       description,
       state,
-      available,
+      disponible,
+      brand,
+      provider
     });
 
     product.save(err => {
@@ -69,7 +76,7 @@ exports.delete = function (req, res) {
 
   const id = req.params.id;
 
-  Product.findByIdAndRemove(id, (err, product) => {
+  Product.deleteOne({ _id: id }, (err, product) => {
 
     if (err) return res.status(500).send(err);
 

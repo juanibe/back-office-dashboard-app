@@ -21,13 +21,13 @@ class ProductIndexComponent extends Component {
           Header: 'Category',
           accessor: 'category',
           Cell: row => {
-            if (row.row.category.length > 1) {
+            if (row.row.category && row.row.category.length > 1) {
               return (
                 <div>
                   {row.row.category[0].name} <b>(+)</b>
                 </div>
               )
-            } else if (row.row.category.length === 1) {
+            } else if (row.row.category && row.row.category.length === 1) {
               return (
                 <div>{row.row.category[0].name}</div>
               )
@@ -51,16 +51,16 @@ class ProductIndexComponent extends Component {
             </select>
         },
         {
-          id: 'available',
-          Header: 'Available',
+          id: 'disponible',
+          Header: 'Disponible',
           filterable: true,
           Filter: ({ filter, onChange }) =>
             <select style={{ width: "100%", height: "100%" }} onChange={event => onChange(event.target.value)} value={filter ? filter.value : undefined}>
               <option value={''}>Show All</option>
-              <option value={1}>Available</option>
-              <option value={0}>Not avilable</option>
+              <option value={1}>Disponible</option>
+              <option value={0}>Not disponible</option>
             </select>,
-          accessor: d => d.available ? <img src={check} style={{ width: '1em' }} /> : <img src={uncheck} style={{ width: '1em' }} />
+          accessor: d => d.disponible ? <img src={check} style={{ width: '1em' }} /> : <img src={uncheck} style={{ width: '1em' }} />
         },
       ],
       categories: [],

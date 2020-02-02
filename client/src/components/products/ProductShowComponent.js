@@ -107,8 +107,8 @@ class ProductShowComponent extends Component {
                   <p key={category._id}>{category.name}</p>
                 )
               })}
-              <h5>Available</h5>
-              {this.state.product.available ? <p style={{ color: "green" }}>Yes</p> : <p style={{ color: "red" }}>No</p>}
+              <h5>Disponible</h5>
+              {this.state.product.disponible ? <p style={{ color: "green" }}>Yes</p> : <p style={{ color: "red" }}>No</p>}
             </div>
             <div className="col-6">
               <img className="image-show-product" src={this.state.image.cloudImage}></img>

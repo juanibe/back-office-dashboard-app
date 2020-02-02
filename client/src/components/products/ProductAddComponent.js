@@ -10,12 +10,15 @@ class ProductAddComponent extends Component {
     super(props)
     this.state = {
       categories: "",
+      providers: "",
       name: "",
       description: "",
       comment: "",
       price: 0,
       category: "",
       available: false,
+      brand: "",
+      provider: ""
     }
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
@@ -25,6 +28,11 @@ class ProductAddComponent extends Component {
     axios.get('http://localhost:3001/api/v1/categories', { headers: { 'Authorization': `Bearer ${jwt}` } })
       .then(response => {
         this.setState({ categories: response.data.result })
+      })
+    axios.get('http://localhost:3001/api/v1/providers', { headers: { 'Authorization': `Bearer ${jwt}` } })
+      .then(response => {
+        console.log("response", response)
+        this.setState({ providers: response.data.result })
       })
   }
 
@@ -47,7 +55,9 @@ class ProductAddComponent extends Component {
     const comment = this.state.comment
     const price = this.state.price
     const category = this.state.category
-    const available = this.state.available
+    const disponible = this.state.disponible
+    const brand = this.state.brand
+    const provider = this.state.provider
 
     const data = {
       name,
@@ -55,7 +65,9 @@ class ProductAddComponent extends Component {
       comment,
       price,
       category,
-      available,
+      disponible,
+      brand,
+      provider
     }
 
     axios.post('http://localhost:3001/api/v1/products', { data }, {
@@ -93,8 +105,14 @@ class ProductAddComponent extends Component {
     })
   }
 
+  loadProviders = () => {
+    return this.state.providers.map(provider => {
+      return { value: provider._id, label: provider.first_name || provider.last_name ? provider.last_name : provider.company_name }
+    })
+  }
+
   render() {
-    if (!this.state.categories) {
+    if (!this.state.categories || !this.state.providers) {
       return (
         <div>Loading...</div>
       )
@@ -111,6 +129,17 @@ class ProductAddComponent extends Component {
               placeholder="Enter name"
               name="name"
               value={this.state.name}
+              onChange={e => { this.handleChange(e) }}
+            />
+          </Form.Group>
+          <Form.Group controlId="formGroupName">
+            <Form.Label>Brand</Form.Label>
+            <Form.Control
+              size="sm"
+              type="text"
+              placeholder="Product brand"
+              name="brand"
+              value={this.state.brand}
               onChange={e => { this.handleChange(e) }}
             />
           </Form.Group>
@@ -151,12 +180,29 @@ class ProductAddComponent extends Component {
             <Form.Label>Categories</Form.Label>
             <Select options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
           </Form.Group>
-          <Form.Group controlId="formGroupAvailable">
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label>Provider</Form.Label>
+            <Form.Control as="select"
+              size="sm"
+              type="text"
+              placeholder="Provider"
+              name="provider"
+              onChange={e => { this.handleChange(e) }}>
+              <option value={""}>Select</option>
+              {this.state.providers.map((response, index) => {
+                return (
+                  <option key={index} value={response._id}>{response.first_name || response.last_name ? response.last_name : response.company_name}</option>
+                )
+              })}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="formGroupDisponible">
             <Form.Check
+              size="sm"
               onChange={this.toggleChange}
               type="checkbox"
-              label='Available'
-              value={this.state.available}
+              label='Disponible'
+              value={this.state.disponible}
               onChange={e => { this.toggleChange() }}
             />
           </Form.Group>

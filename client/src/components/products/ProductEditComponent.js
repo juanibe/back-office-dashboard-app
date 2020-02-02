@@ -5,8 +5,6 @@ import { getJwt } from '../../helpers/jwt'
 import { withRouter, Link } from 'react-router-dom'
 import Select from 'react-select'
 
-
-
 class ProductEditComponent extends Component {
   constructor(props) {
     super(props)
@@ -16,7 +14,7 @@ class ProductEditComponent extends Component {
       comment: "",
       price: 0,
       category: [],
-      available: "",
+      disponible: "",
       categories: []
     }
   }
@@ -37,13 +35,13 @@ class ProductEditComponent extends Component {
           comment: response.data.comment,
           price: response.data.price,
           category: response.data.category,
-          available: response.data.available,
+          disponible: response.data.disponible,
         })
       })
   }
 
   toggleChange = () => {
-    this.setState({ available: !this.state.available })
+    this.setState({ disponible: !this.state.disponible })
   }
 
   handleFormSubmit = event => {
@@ -56,7 +54,7 @@ class ProductEditComponent extends Component {
     const comment = this.state.comment
     const price = this.state.price
     const category = this.state.category
-    const available = this.state.available
+    const disponible = this.state.disponible
 
     const headers = {
       'Authorization': `Bearer ${jwt}`,
@@ -68,7 +66,7 @@ class ProductEditComponent extends Component {
       comment,
       price,
       category,
-      available,
+      disponible,
     }, {
       headers: headers,
     }).then(response => {
@@ -160,11 +158,11 @@ class ProductEditComponent extends Component {
             <Form.Label>Categories</Form.Label>
             <Select defaultValue={this.state.category} options={this.loadOptions()} isMulti onChange={e => { this.handleMultipleSelectChange(e) }} />
           </Form.Group>
-          <Form.Group controlId="formGroupAvailable">
+          <Form.Group controlId="formGroupDisponible">
             <Form.Check
-              checked={this.state.available}
+              checked={this.state.disponble}
               type="checkbox"
-              label='Available'
+              label='Disponible'
               onChange={e => { this.toggleChange(e) }}
             />
           </Form.Group>
