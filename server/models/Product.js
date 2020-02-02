@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Provider = require('./Provider')
+
 
 const ProductSchema = new Schema({
 
@@ -8,6 +10,12 @@ const ProductSchema = new Schema({
     maxlength: 64,
     minlength: 1,
     required: [true, 'Product name is required'],
+  },
+
+  brand: {
+    type: String,
+    maxlength: 64,
+    minlength: 1,
   },
 
   description: {
@@ -28,18 +36,41 @@ const ProductSchema = new Schema({
     minlength: 0
   },
 
-  available: {
+  disponible: {
     type: Boolean,
     default: true
   },
+
+  availability: {
+    type: Array,
+
+  },
+
   price: {
     type: Number,
+    default: 0,
+    min: 0,
+    max: 999999
+  },
+
+  provider: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Provider'
+    }]
   },
 
   category: {
     type: [{
       type: Schema.Types.ObjectId,
       ref: 'Category'
+    }]
+  },
+
+  event: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Event'
     }]
   },
 
@@ -58,10 +89,17 @@ const ProductSchema = new Schema({
     timestamps: true
   });
 
-ProductSchema.virtual('modelName')
-  .get(function () {
-    return 'Product'
+ProductSchema.post("save", function (doc) {
+  Provider.findByIdAndUpdate(doc.provider[0], { $push: { product: doc._id.toString() } }, { multi: true }, function (error, provider) {
+    if (error) console.log(error)
   })
+})
+
+// ProductSchema.pre("deleteOne", { document: true }, function (next) {
+//   let id = this.getQuery()["_id"];
+//   Provider.updateMany()
+//   next()
+// })
 
 const Product = mongoose.model('Product', ProductSchema);
 
