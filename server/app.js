@@ -72,17 +72,16 @@ app.use(cors({
 }));
 
 const upload = require('./config/multer')
-
 const index = require('./routes/web-routes/index');
 const auth = require('./routes/api-routes/auth');
 const users = require('./routes/api-routes/user')
 const products = require('./routes/api-routes/product');
 const categories = require('./routes/api-routes/category')
 const clients = require('./routes/api-routes/client')
+const providers = require('./routes/api-routes/provider')
 const events = require('./routes/api-routes/event')
 const images = require('./routes/api-routes/image')
 const general = require('./routes/api-routes/general')
-
 
 app.use('/api/v1', index);
 app.use('/api/v1', auth)
@@ -90,6 +89,7 @@ app.use('/api/v1/users', passport.authenticate('jwt', { session: false }), acl.a
 app.use('/api/v1/products', passport.authenticate('jwt', { session: false }), acl.authorize, products)
 app.use('/api/v1/categories', passport.authenticate('jwt', { session: false }), acl.authorize, categories)
 app.use('/api/v1/clients', passport.authenticate('jwt', { session: false }), acl.authorize, clients)
+app.use('/api/v1/providers', passport.authenticate('jwt', { session: false }), acl.authorize, providers)
 app.use('/api/v1/events', passport.authenticate('jwt', { session: false }), acl.authorize, events)
 app.use('/api/v1/images', passport.authenticate('jwt', { session: false }), acl.authorize, upload.any(), images)
 app.use('/api/v1/general', passport.authenticate('jwt', { session: false }), acl.authorize, general)
