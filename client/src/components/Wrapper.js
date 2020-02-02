@@ -10,6 +10,7 @@ import ConfirmationPageComponent from "../components/ConfirmationPageComponent"
 import ProfileComponent from "../components/ProfileComponent"
 import EditPictureComponent from "../components/EditPictureComponent"
 import EditPasswordComponent from "../components/EditPasswordComponent";
+import StatsComponent from "../components/StatsComponent";
 
 import ProductIndexComponent from './products/ProductIndexComponent'
 import ProductShowComponent from "./products/ProductShowComponent";
@@ -35,6 +36,11 @@ import UserIndexComponent from './users/UserIndexComponent'
 import UserShowComponent from './users/UserShowComponent'
 import UserAddComponent from './users/UserAddComponent'
 import UserEditComponent from './users/UserEditComponent'
+
+import ProviderIndexComponent from './providers/ProviderIndexComponent'
+import ProviderShowComponent from './providers/ProviderShowComponent'
+import ProviderEditComponent from './providers/ProviderEditComponent'
+import ProviderAddComponent from './providers/ProviderAddComponent'
 
 
 class Wrapper extends Component {
@@ -65,34 +71,38 @@ class Wrapper extends Component {
 
   loadRoutes = () => {
 
-    const protectedRoutes = ['d', 'g', 'i', 'k', 'm', 'r', 's', 't', 'u']
+    const protectedRoutes = ['d', 'g', 'i', 'k', 'm', 'r', 's', 't', 'u', 'z']
 
     let routes = [
-      { id: 'a', path: '/home', component: Home },
-      { id: 'b', path: '/products', component: ProductIndexComponent },
-      { id: 'c', path: '/products/add', component: ProductAddComponent },
-      { id: 'd', path: '/products/:id/edit', component: ProductEditComponent },
-      { id: 'e', path: '/products/:id/show', component: ProductShowComponent },
-      { id: 'f', path: '/categories/', component: CategoryIndexComponent },
-      { id: 'g', path: '/categories/:id/edit', component: CategoryEditComponent },
-      { id: 'h', path: '/categories/:id/show', component: CategoryShowComponent },
-      { id: 'i', path: '/categories/add', component: CategoryAddComponent },
-      { id: 'j', path: '/clients', component: ClientIndexComponent },
-      { id: 'k', path: '/clients/:id/edit', component: ClientEditComponent },
-      { id: 'l', path: '/clients/:id/show', component: ClientShowComponent },
-      { id: 'm', path: '/clients/add', component: ClientAddComponent },
-      { id: 'n', path: '/events', component: EventIndexComponent },
-      { id: 'o', path: '/events/:id/edit', component: EventEditComponent },
-      { id: 'p', path: '/events/:id/show', component: EventShowComponent },
-      { id: 'q', path: '/events/add', component: EventAddComponent },
-      { id: 'r', path: '/users', component: UserIndexComponent },
-      { id: 's', path: '/users/:id/show', component: UserShowComponent },
-      { id: 't', path: '/users/:id/edit', component: UserEditComponent },
-      { id: 'u', path: '/users/add', component: UserAddComponent },
-      { id: 'v', path: '/confirm', component: ConfirmationPageComponent },
-      { id: 'w', path: '/edit-image', component: EditPictureComponent },
-      { id: 'x', path: '/profile', component: ProfileComponent },
-      { id: 'y', path: '/edit-password', component: EditPasswordComponent }
+      { id: 'a1', path: '/home', component: Home },
+      { id: 'b1', path: '/products', component: ProductIndexComponent },
+      { id: 'c1', path: '/products/add', component: ProductAddComponent },
+      { id: 'd1', path: '/products/:id/edit', component: ProductEditComponent },
+      { id: 'e1', path: '/products/:id/show', component: ProductShowComponent },
+      { id: 'f1', path: '/categories/', component: CategoryIndexComponent },
+      { id: 'g1', path: '/categories/:id/edit', component: CategoryEditComponent },
+      { id: 'h1', path: '/categories/:id/show', component: CategoryShowComponent },
+      { id: 'i1', path: '/categories/add', component: CategoryAddComponent },
+      { id: 'j1', path: '/clients', component: ClientIndexComponent },
+      { id: 'k1', path: '/clients/:id/edit', component: ClientEditComponent },
+      { id: 'l1', path: '/clients/:id/show', component: ClientShowComponent },
+      { id: 'm1', path: '/clients/add', component: ClientAddComponent },
+      { id: 'n1', path: '/events', component: EventIndexComponent },
+      { id: 'o1', path: '/events/:id/edit', component: EventEditComponent },
+      { id: 'p1', path: '/events/:id/show', component: EventShowComponent },
+      { id: 'q1', path: '/events/add', component: EventAddComponent },
+      { id: 'r1', path: '/users', component: UserIndexComponent },
+      { id: 's1', path: '/users/:id/show', component: UserShowComponent },
+      { id: 't1', path: '/users/:id/edit', component: UserEditComponent },
+      { id: 'u1', path: '/users/add', component: UserAddComponent },
+      { id: 'v1', path: '/confirm', component: ConfirmationPageComponent },
+      { id: 'w1', path: '/edit-image', component: EditPictureComponent },
+      { id: 'x1', path: '/profile', component: ProfileComponent },
+      { id: 'y1', path: '/edit-password', component: EditPasswordComponent },
+      { id: 'z1', path: '/stats', component: StatsComponent },
+      { id: 'a2', path: '/providers', component: ProviderIndexComponent },
+      { id: 'b2', path: '/providers/add', component: ProviderAddComponent },
+      { id: 'c2', path: '/providers/:id/show', component: ProviderShowComponent }
     ]
 
     return routes.map((route) => {

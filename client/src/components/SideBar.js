@@ -27,20 +27,21 @@ class SideBar extends Component {
 
   listItems = () => {
 
-    const protectedRoutes = ['f', 'h', 'i']
+    const protectedRoutes = ['g', 'h', 'i']
 
     let items = [
-      { id: 'a', value: 'Home', route: '/' },
+      { id: 'a', value: 'Home', route: '/home' },
       { id: 'b', value: 'Products', route: '/products' },
       { id: 'c', value: 'Categories', route: '/categories' },
       { id: 'd', value: 'Clients', route: '/clients' },
       { id: 'e', value: 'Events', route: '/events' },
-      { id: 'f', value: 'Users', route: '/users' },
-      { id: 'g', value: 'Profile', route: '/profile' },
-      { id: 'h', value: 'Accounts', route: '/accounts' },
-      { id: 'i', value: 'Stats', route: '/stats' },
-      { id: 'j', value: 'Help', route: '/help' },
-      { id: 'k', value: 'Logout', route: '/logout', logout: this.logout }
+      { id: 'f', value: 'Providers', route: '/providers' },
+      { id: 'g', value: 'Users', route: '/users' },
+      { id: 'h', value: 'Stats', route: '/stats' },
+      { id: 'i', value: 'Accounts', route: '/accounts' },
+      { id: 'j', value: 'Profile', route: '/profile' },
+      { id: 'k', value: 'Help', route: '/help' },
+      { id: 'l', value: 'Logout', route: '/logout', logout: this.logout }
     ]
     if (this.state.user.role !== 'admin') {
       items = items.filter((item) => {
