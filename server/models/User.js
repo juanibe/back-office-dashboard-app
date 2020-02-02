@@ -25,7 +25,19 @@ const UserSchema = new Schema({
     required: true
   },
 
-  role: { type: String, required: true, default: 'user' },
+  role: {
+    type: String,
+    required: true,
+    default: 'user'
+  },
+
+  salary: {
+    type: Number,
+    min: 0,
+    max: 999999,
+    default: 0,
+    required: false
+  },
 
   image: {
     type: [{
