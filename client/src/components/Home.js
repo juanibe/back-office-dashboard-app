@@ -28,7 +28,7 @@ class Home extends Component {
     }
 
     axios.all([
-      axios.get('http://localhost:3001/api/v1/events', { headers: { 'Authorization': `Bearer ${jwt}` } }),
+      axios.get('http://localhost:3001/api/v1/general/events-day', { headers: { 'Authorization': `Bearer ${jwt}` } }),
       axios.get('http://localhost:3001/api/v1/products/count-total', { headers: { 'Authorization': `Bearer ${jwt}` } }),
       axios.get('http://localhost:3001/api/v1/categories/count-total', { headers: { 'Authorization': `Bearer ${jwt}` } }),
       axios.get('http://localhost:3001/api/v1/events/count-total', { headers: { 'Authorization': `Bearer ${jwt}` } }),
@@ -37,7 +37,7 @@ class Home extends Component {
     ])
       .then(axios.spread((eventList, products, categories, events, clients, users) => {
         this.setState({
-          eventList: eventList.data.result,
+          eventList: eventList.data,
           products: products,
           categories: categories,
           events: events,
@@ -54,6 +54,7 @@ class Home extends Component {
 
 
   render() {
+    console.log(this.state.eventList)
     if (
       this.state.events === null ||
       this.state.products === null ||
@@ -69,11 +70,30 @@ class Home extends Component {
     return (
 
       <div className='main-content home-content'>
-        {this.state.eventList.length !== 0 ? <h5>Upcoming events</h5> : <h5>No upcoming events</h5>}
-        {this.state.eventList.map((result) => {
-          return <p key={result._id}><Link to={`events/${result._id}/show`} >{result.client[0].full_name}, {Moment(result.date).format('DD-MM-YYYY')}</Link></p>
-        })
-        }
+        <div className="events-general">
+          {this.state.eventList.length !== 0 ? <h5>Upcoming events</h5> : <h5>No upcoming events</h5>}
+          {this.state.eventList.map((result) => {
+            return (
+              <div key={result._id} className="event-list">
+                <strong className="info-date-title">{Moment(result._id).format('DD-MM-YYYY')}</strong>
+                {result.info.map(info => {
+                  return (
+                    <div key={info._id}>
+                      <p className="info">{info.client[0].last_name}, {info.client[0].first_name}</p>
+                      <p className="info">{info.place}</p>
+                      <p className="info info-link-to-detail"><Link to={`/events/${info._id}/show`}>See details</Link></p>
+                      <div className="info-divisory-line"></div>
+                    </div>
+                  )
+                })}
+              </div>
+
+            )
+            // return <p key={result._id}><Link to={`events/${result._id}/show`} >{result.info.client}</Link></p>
+          })
+          }
+        </div>
+
         <hr></hr>
         <div>
           <div className='container'>
