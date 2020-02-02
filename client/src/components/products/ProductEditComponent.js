@@ -160,7 +160,7 @@ class ProductEditComponent extends Component {
           </Form.Group>
           <Form.Group controlId="formGroupDisponible">
             <Form.Check
-              checked={this.state.disponble}
+              checked={this.state.disponible}
               type="checkbox"
               label='Disponible'
               onChange={e => { this.toggleChange(e) }}
