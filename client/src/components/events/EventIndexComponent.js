@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { getJwt } from '../../helpers/jwt'
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
+import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts';
 
 const Moment = require('moment');
 
@@ -18,7 +19,7 @@ class EventIndexComponent extends Component {
           Header: 'Client',
           accessor: 'client',
           Cell: row => {
-            return <div>{row.original.client[0].full_name}</div>
+            return <div>{row.original.client.length > 0 ? row.original.client[0].full_name : <strong>-</strong>}</div>
           },
 
           filterable: true,
@@ -72,11 +73,20 @@ class EventIndexComponent extends Component {
     if (this.props.user.role === 'admin' || this.props.user.role === 'employee') {
       this.setState({ showAddButton: true })
     }
+
+    if (this.props.location.state && this.props.location.state.date) {
+      ToastsStore.success(`Event on ${Moment(this.props.location.state.date).format('DD-MM-YYYY')} created successfuly`, 10000)
+    }
   }
 
   render() {
     return (
       <div className='main-content'>
+        <ToastsContainer
+          store={ToastsStore}
+          position={ToastsContainerPosition.TOP_RIGHT}
+          lightBackground
+        />
         <CustomReactTable
           columns={this.state.columns}
           modelName={"Events"}
