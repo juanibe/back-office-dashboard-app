@@ -4,17 +4,35 @@ const Schema = mongoose.Schema;
 
 const ClientSchema = new Schema({
 
+  legal_type: {
+    type: Number,
+    min: 0,
+    max: 1,
+    default: 0,
+    validate: {
+      validator: Number.isInteger,
+      message: '{VALUE} is not an integer value'
+    }
+  },
+
+  company_name: {
+    type: String,
+    maxlength: 64,
+    minlength: 1,
+    required: function () { return this.legal_type === 0 }
+  },
+
   first_name: {
     type: String,
     maxlength: 64,
     minlength: 1,
-    required: [true, 'Client first name is required'],
+    required: function () { return this.legal_type === 1 }
   },
 
   last_name: {
     type: String,
     maxlength: 64,
-    minlength: 1,
+    required: function () { return this.legal_type === 1 }
   },
 
   address: {
