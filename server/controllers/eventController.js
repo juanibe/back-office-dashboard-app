@@ -1,5 +1,5 @@
 const Event = require('../models/Event');
-const Product = require('../models/Event');
+const moment = require('moment');
 
 const GeneralRepository = require('../repositories/generalRepository');
 
@@ -34,15 +34,20 @@ exports.create = function (req, res) {
     price,
     comment
   });
-  event.save(err => {
-    if (err) {
-      res
-        .status(400)
-        .json({ message: "Saving event to database went wrong." });
-      return;
-    }
-    res.send(event);
-  })
+
+  if (new Date(moment(date)) < new Date()) {
+    res.status(400).send({ message: "Invalid date" })
+  } else {
+    event.save(err => {
+      if (err) {
+        res
+          .status(400)
+          .send(err.errors);
+        return;
+      }
+      res.send(event);
+    })
+  }
 }
 
 exports.show = function (req, res) {
