@@ -24,6 +24,7 @@ exports.create = function (req, res) {
   const phone = req.body.phone;
   const web = req.body.web;
   const comment = req.body.comment;
+  const legal_type = req.body.legal_type
 
   const client = new Client({
     first_name,
@@ -32,7 +33,8 @@ exports.create = function (req, res) {
     email,
     phone,
     web,
-    comment
+    comment,
+    legal_type
   });
 
   client.save().then(response => {
