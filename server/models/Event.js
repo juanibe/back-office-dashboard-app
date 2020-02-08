@@ -4,7 +4,6 @@ const Product = require('../models/Product');
 
 const moment = require('moment');
 
-
 const EventSchema = new Schema({
 
   client: {
@@ -15,17 +14,27 @@ const EventSchema = new Schema({
   },
 
   product: {
-    type: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Product'
-    }]
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+        required: true
+      }
+    ],
+    validate: {
+      validator: function (v) {
+        return v !== null && v.length > 0;
+      },
+      message: props => `${props.value} is null or empty`
+    }
   },
 
   date: {
     type: Date,
     maxlength: 64,
     lowercase: true,
-    trim: true
+    trim: true,
+    required: [true, 'You need to select a date for the event']
   },
 
   place: {
@@ -41,7 +50,6 @@ const EventSchema = new Schema({
   comment: {
     type: String,
     maxlength: 12000,
-    minlength: 1,
   },
 
   status: {
@@ -79,6 +87,7 @@ const EventSchema = new Schema({
 //   Product.find({ event: eventId }).then(response => { response.map(items => { console.log(items._id) }) })
 //   next()
 // })
+
 
 EventSchema.pre("find", function () {
   Event.updateMany({ date: { $lt: moment().format() } }, { status: 1 }, { new: true }).then(result => { console.log(result) })
