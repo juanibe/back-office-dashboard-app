@@ -23,7 +23,8 @@ class CustomReactTable extends Component {
       totalItems: null,
       loading: false,
       state: {},
-      dateAvailability: ""
+      dateAvailability: "",
+      availableProducts: []
     }
   }
 
@@ -47,12 +48,22 @@ class CustomReactTable extends Component {
     }
     this.setState({ loading: true })
 
+
+
     axios.get(`http://localhost:3001/api/v1${this.props.location.pathname}`, config)
       .then(response => {
         console.log(response.data.result)
         this.setState({
           data: response.data.result,
           loading: false
+        })
+      })
+
+    axios.get(`http://localhost:3001/api/v1/general/availability`, config)
+      .then(response => {
+        console.log(response.data)
+        this.setState({
+          availableProducts: response.data,
         })
       })
 
@@ -96,6 +107,7 @@ class CustomReactTable extends Component {
     const selectAll = <span className='functionalities-select-all-table'><button onClick={() => { this.refreshTableFilters() }} className="btn-sm btn-outline-info">Select all</button></span>
     const refreshTable = <span className='functionalities-refresh-table'><button onClick={() => { this.refreshTableFilters() }} className="btn-sm btn-outline-dark">Refresh table</button></span>
     const addButton = <span className='functionalities-add-item-table'> <Link to={`${this.props.location.pathname}/add`}><button className="btn-sm btn-outline-success">Add new {this.props.modelName}</button></Link></span>
+    const checkAvailablity = <span className='functionalities-add-item-table'> <Link to={`${this.props.location.pathname}/add`}><button className="btn-sm btn-outline-success">Check availability</button></Link></span>
 
     if (this.props.showAddButton) {
       return (
@@ -103,11 +115,13 @@ class CustomReactTable extends Component {
           {addButton}
           {refreshTable}
           {selectAll}
+          {checkAvailablity}
         </div>
       )
     } else {
       return (
         <div className='functionalities-react-table'>
+          {checkAvailablity}
           {refreshTable}
           {selectAll}
         </div>
@@ -163,7 +177,7 @@ class CustomReactTable extends Component {
         )}
         <h3>{`${this.props.modelName} (${this.state.totalItems})`}</h3>
         {this.loadFunctionalities()}
-        <div>
+        {/* <div>
           <label>Availability</label>
           <DatePicker
             dateFormat="dd-MM-yyyy"
@@ -171,7 +185,10 @@ class CustomReactTable extends Component {
             selected={this.state.dateAvailability}
           />
           <button onClick={() => { this.checkDate() }}>Check</button>
-        </div>
+        </div> */}
+        {this.state.availableProducts.map(availableProduct => {
+          return availableProduct.name
+        })}
         <ReactTable
           data={this.state.data}
           columns={this.props.columns}
