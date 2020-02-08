@@ -1,12 +1,10 @@
 const Client = require('../models/Client');
 const Event = require('../models/Event');
 const Product = require('../models/Product');
-const Category = require('../models/Category');
-const GeneralRepository = require('../repositories/generalRepository');
-const mongoose = require('mongoose');
 const moment = require('moment');
 
 exports.groupByDate = function (req, res) {
+
   const date = req.query.groupByDate
 
   Event.aggregate([
@@ -41,7 +39,8 @@ exports.groupByDate = function (req, res) {
 }
 
 exports.checkDateAvailability = function (req, res) {
-  const dateAvailability = moment(req.query.dateAvailability).format("DD-MM-YYYY")
+
+  const dateAvailability = req.query.dateAvailability
 
   Product.aggregate([
     {
@@ -56,11 +55,12 @@ exports.checkDateAvailability = function (req, res) {
     {
       $match: { date: dateAvailability },
     },
-
-  ]).then(response => { res.send(response) })
+  ])
+    .then(response => { res.send(response) })
 }
 
 exports.listEventsByDate = function (req, res) {
+
   Event.aggregate([
     {
       $match: { status: 0 }
@@ -79,6 +79,4 @@ exports.listEventsByDate = function (req, res) {
   ])
     .then(response => res.send(response))
 }
-
-
 
