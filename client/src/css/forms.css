@@ -1,0 +1,38 @@
+.data-confrim-client{
+  padding : 2px;
+  margin : 0;
+  line-height : 20px;
+  font-size: medium;
+  background-color: #f6f4e6;
+}
+
+.title-data-confrim-client{
+  font-size: small;
+}
+
+.label-data-confirm-client{
+  font-size: small;
+}
+
+.container-data-confirm-client{
+  margin: 30px;
+}
+
+
+.checkbox {
+  display: inline-block;
+  /*ie7 -- start*/
+  *display: inline;
+  zoom: 1;
+}
+
+.checkbox-label {
+  display: flex;
+  /* flex-direction: row-reverse; */
+}
+
+.error-validation-message{
+  font-size: x-small;
+  color: rgb(200, 50, 50)
+}
+
