@@ -90,10 +90,10 @@ class EventShowComponent extends Component {
           {this.loadFunctionalities()}
           <div>
             {this.state.showId ? <div style={{ fontSize: "0.7em", display: "inline-block", color: "green", padding: "5px", margin: "0 0 10px 0" }}>Unique Id: <b>{this.state.event_id}</b></div> : <div></div>}
-            <h3>{this.state.event.client[0].full_name}</h3>
-            <p><ins>Event date</ins>: <b>{Moment(this.state.event.date).format('DD-MM-YYYY')}</b></p>
-            <p><ins>Event address</ins>: {this.state.event.place}</p>
-            <p><ins>Event price</ins>: {this.state.event.price}</p>
+            <h3>{this.state.event.client.length > 0 ? this.state.event.client[0].full_name : <strong>Error: no client</strong>}</h3>
+            <p><ins>Event date</ins>: <b>{this.state.event.date ? Moment(this.state.event.date).format('DD-MM-YYYY') : 'Error: no date'}</b></p>
+            <p><ins>Event address</ins>: {this.state.event.place ? this.state.event.place : <strong>-</strong>}</p>
+            <p><ins>Event price</ins>: {this.state.event.price ? this.state.event.price : <strong>-</strong>}</p>
             <p><ins>Event comment</ins>: {this.state.event.comment}</p>
             <h5>Products:</h5>
             {this.state.event.product.map(product => {
