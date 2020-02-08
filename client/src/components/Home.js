@@ -54,7 +54,6 @@ class Home extends Component {
 
 
   render() {
-    console.log(this.state.eventList)
     if (
       this.state.events === null ||
       this.state.products === null ||
@@ -68,7 +67,6 @@ class Home extends Component {
       )
     }
     return (
-
       <div className='main-content home-content'>
         <div className="events-general">
           {this.state.eventList.length !== 0 ? <h5>Upcoming events</h5> : <h5>No upcoming events</h5>}
@@ -79,17 +77,15 @@ class Home extends Component {
                 {result.info.map(info => {
                   return (
                     <div key={info._id}>
-                      <p className="info">{info.client[0].last_name}, {info.client[0].first_name}</p>
-                      <p className="info">{info.place}</p>
-                      <p className="info info-link-to-detail"><Link to={`/events/${info._id}/show`}>See details</Link></p>
+                      {info.client.length > 0 ? (<p className="info">{info.client[0].last_name}, {info.client[0].first_name}</p>) : "Error: no client"}
+                      {info.place ? <p className="info">{info.place}</p> : "Error: no place"}
+                      {info._id ? <p className="info info-link-to-detail"><Link to={`/events/${info._id}/show`}>See details</Link></p> : "Error"}
                       <div className="info-divisory-line"></div>
                     </div>
                   )
                 })}
               </div>
-
             )
-            // return <p key={result._id}><Link to={`events/${result._id}/show`} >{result.info.client}</Link></p>
           })
           }
         </div>

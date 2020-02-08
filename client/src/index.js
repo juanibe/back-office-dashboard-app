@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import '../src/css/react-table.css'
 import '../src/css/show-view.css'
+import '../src/css/events.css'
+import '../src/css/forms.css'
 import '../src/css/home.css'
 import '../src/css/header.css'
 import App from './App';
